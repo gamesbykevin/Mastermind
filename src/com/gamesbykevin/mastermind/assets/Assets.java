@@ -76,12 +76,11 @@ public class Assets
     	Cancel, 
     	Confirm, 
     	Facebook, 
+    	HomePage,
     	Instructions,
     	Logo, 
-    	Gameover, 
     	Splash, 
     	Twitter, 
-    	Winner
     }
     
     /**
@@ -90,7 +89,7 @@ public class Assets
      */
     public enum ImageGameKey
     {
-    	
+    	PegSelections
     }
     
     /**
@@ -118,6 +117,11 @@ public class Assets
     public enum AudioGameKey
     {
     	 
+    }
+    
+    public static final void playMenuSelection()
+    {
+    	//Audio.play(AudioMenuKey.Selection);
     }
     
     /**

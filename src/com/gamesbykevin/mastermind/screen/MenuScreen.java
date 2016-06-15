@@ -261,7 +261,7 @@ public class MenuScreen implements Screen, Disposable
         				//exit game here instead of update(), to avoid infinite loop
 	        			case Exit:
 	        	            //play sound effect
-	        	            //Audio.play(Assets.AudioMenuKey.Selection);
+	        				Assets.playMenuSelection();
 	        	            
 	        	            //exit game
 	        	            getScreen().getPanel().getActivity().finish();
@@ -294,7 +294,7 @@ public class MenuScreen implements Screen, Disposable
 			{
         		case Instructions:
                     //play sound effect
-                    //Audio.play(Assets.AudioMenuKey.Selection);
+        			Assets.playMenuSelection();
                     
                     //go to instructions
                     getScreen().getPanel().getActivity().openWebpage(MainActivity.WEBPAGE_GAME_INSTRUCTIONS_URL);
@@ -304,7 +304,7 @@ public class MenuScreen implements Screen, Disposable
                     
         		case Facebook:
                     //play sound effect
-                    //Audio.play(Assets.AudioMenuKey.Selection);
+        			Assets.playMenuSelection();
                     
                     //go to instructions
                     getScreen().getPanel().getActivity().openWebpage(MainActivity.WEBPAGE_FACEBOOK_URL);
@@ -314,7 +314,7 @@ public class MenuScreen implements Screen, Disposable
                     
         		case Twitter:
                     //play sound effect
-                    //Audio.play(Assets.AudioMenuKey.Selection);
+        			Assets.playMenuSelection();
                     
                     //go to instructions
                     getScreen().getPanel().getActivity().openWebpage(MainActivity.WEBPAGE_TWITTER_URL);
@@ -330,7 +330,7 @@ public class MenuScreen implements Screen, Disposable
                     notify = false;
                     
                     //play sound effect
-                    //Audio.play(Assets.AudioMenuKey.Selection);
+                    Assets.playMenuSelection();
                     
                     //we do not need to continue
 	                break;
@@ -340,14 +340,14 @@ public class MenuScreen implements Screen, Disposable
     				getScreen().setState(ScreenManager.State.Options);
                     
                     //play sound effect
-                    //Audio.play(Assets.AudioMenuKey.Selection);
+    				Assets.playMenuSelection();
                     
                     //we do not need to continue
 	                break;
                     
 				case More: 
 	                //play sound effect
-	                //Audio.play(Assets.AudioMenuKey.Selection);
+					Assets.playMenuSelection();
 	                
 	                //go to web page
 	                getScreen().getPanel().getActivity().openWebpage(MainActivity.WEBPAGE_MORE_GAMES_URL);
@@ -357,7 +357,7 @@ public class MenuScreen implements Screen, Disposable
 	                
 				case Rate:
 	                //play sound effect
-	                //Audio.play(Assets.AudioMenuKey.Selection);
+					Assets.playMenuSelection();
 	                
 	                //go to web page
 	                getScreen().getPanel().getActivity().openWebpage(MainActivity.WEBPAGE_RATE_URL);

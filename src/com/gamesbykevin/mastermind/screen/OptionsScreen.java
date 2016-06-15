@@ -321,7 +321,7 @@ public class OptionsScreen implements Screen, Disposable
 	                getScreen().setState(ScreenManager.State.Ready);
 	                
 	                //play sound effect
-	                //Audio.play(Assets.AudioMenuKey.Selection);
+	                Assets.playMenuSelection();
 	                
 	                //end of case
 	                break;
@@ -336,7 +336,7 @@ public class OptionsScreen implements Screen, Disposable
 			        button.positionText(getScreen().getPaint());
 					
 	                //play sound effect
-	                //Audio.play(Assets.AudioMenuKey.Selection);
+			        Assets.playMenuSelection();
 	                
 	                //end of case
 	                break;
@@ -353,7 +353,7 @@ public class OptionsScreen implements Screen, Disposable
 	                Audio.setAudioEnabled(!Audio.isAudioEnabled());
 	                
 	                //play sound effect
-	                //Audio.play(Assets.AudioMenuKey.Selection);
+	                Assets.playMenuSelection();
 	                
 	                //end of case
 	                break;
@@ -361,7 +361,7 @@ public class OptionsScreen implements Screen, Disposable
 				case Instructions:
 					
 	                //play sound effect
-	                //Audio.play(Assets.AudioMenuKey.Selection);
+					Assets.playMenuSelection();
 	                
 	                //go to instructions
 					getScreen().getPanel().getActivity().openWebpage(MainActivity.WEBPAGE_GAME_INSTRUCTIONS_URL);
@@ -372,7 +372,7 @@ public class OptionsScreen implements Screen, Disposable
 				case Facebook:
 					
 	                //play sound effect
-	                //Audio.play(Assets.AudioMenuKey.Selection);
+					Assets.playMenuSelection();
 	                
 	                //go to instructions
 					getScreen().getPanel().getActivity().openWebpage(MainActivity.WEBPAGE_FACEBOOK_URL);
@@ -383,7 +383,7 @@ public class OptionsScreen implements Screen, Disposable
 				case Twitter:
 					
 	                //play sound effect
-	                //Audio.play(Assets.AudioMenuKey.Selection);
+					Assets.playMenuSelection();
 	                
 	                //go to instructions
 					getScreen().getPanel().getActivity().openWebpage(MainActivity.WEBPAGE_TWITTER_URL);

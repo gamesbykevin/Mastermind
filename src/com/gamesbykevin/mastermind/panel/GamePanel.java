@@ -129,14 +129,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Di
         
         //assign null
         RANDOM = null;
-        
+       
+        //if the screen object exists recycle
         if (screen != null)
         {
             screen.dispose();
             screen = null;
         }
         
-        //recycle all asset objects
+        //recycle all assets
         Assets.recycle();
     }
     

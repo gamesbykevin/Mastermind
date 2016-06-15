@@ -123,7 +123,7 @@ public class ExitScreen implements Screen, Disposable
 	                    screen.setState(ScreenManager.State.Running);
 	                    
 	                    //play sound effect
-	                    //Audio.play(Assets.AudioMenuKey.Selection);
+	                    Assets.playMenuSelection();
 	                    
 	                    //return true;
 	                    return false;
@@ -133,7 +133,7 @@ public class ExitScreen implements Screen, Disposable
 	                    screen.setState(ScreenManager.State.Ready);
 	                    
 	                    //play sound effect
-	                    //Audio.play(Assets.AudioMenuKey.Selection);
+	                    Assets.playMenuSelection();
 	                    
 	                    //return false;
 	                    return false;

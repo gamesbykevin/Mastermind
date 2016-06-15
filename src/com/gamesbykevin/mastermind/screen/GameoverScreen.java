@@ -257,7 +257,7 @@ public class GameoverScreen implements Screen, Disposable
 					getScreen().setState(ScreenManager.State.Running);
 					
 	                //play sound effect
-	                //Audio.play(Assets.AudioMenuKey.Selection);
+					Assets.playMenuSelection();
 					break;
 			
 				case Next:
@@ -278,7 +278,7 @@ public class GameoverScreen implements Screen, Disposable
 					getScreen().setState(ScreenManager.State.Running);
 	                
 	                //play sound effect
-	                //Audio.play(Assets.AudioMenuKey.Selection);
+					Assets.playMenuSelection();
 	                
 	                //end of case
 	                break;
@@ -289,7 +289,7 @@ public class GameoverScreen implements Screen, Disposable
 	                getScreen().setState(ScreenManager.State.Ready);
 					
 	                //play sound effect
-	                //Audio.play(Assets.AudioMenuKey.Selection);
+	                Assets.playMenuSelection();
 	                
 	                //end of case
 	                break;
@@ -297,7 +297,7 @@ public class GameoverScreen implements Screen, Disposable
 	    		case Rate:
 	                
 	                //play sound effect
-	                //Audio.play(Assets.AudioMenuKey.Selection);
+	    			Assets.playMenuSelection();
 	                
 	                //go to rate game page
 	                getScreen().getPanel().getActivity().openWebpage(MainActivity.WEBPAGE_RATE_URL);

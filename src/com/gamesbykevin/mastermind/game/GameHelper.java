@@ -40,11 +40,6 @@ public final class GameHelper
 	 */
 	public static boolean GAMEOVER = false;
 	
-	/**
-	 * Darken the background accordingly
-	 */
-	private static final int TRANSITION_ALPHA_TRANSPARENCY = 95;
-	
     /**
      * Update game
      * @throws Exception 
