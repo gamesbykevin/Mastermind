@@ -2,11 +2,12 @@ package com.gamesbykevin.mastermind.board.peg;
 
 import com.gamesbykevin.androidframework.anim.Animation;
 import com.gamesbykevin.androidframework.base.Entity;
-import com.gamesbykevin.androidframework.resources.Disposable;
 import com.gamesbykevin.androidframework.resources.Images;
 import com.gamesbykevin.mastermind.assets.Assets;
 
-public class Peg extends Entity implements Disposable
+import android.graphics.Bitmap;
+
+public final class Peg extends Entity
 {
 	public enum Selections
 	{
@@ -61,11 +62,8 @@ public class Peg extends Entity implements Disposable
 	 */
 	public static final int PEG_HINT_ANIMATION_HEIGHT = 32;
 	
-	public Peg() 
+	protected Peg() 
 	{
-		//our animation object
-		Animation animation = null;
-		
 		//add each selection as an animation
 		for (Selections selection : Selections.values())
 		{
@@ -74,11 +72,8 @@ public class Peg extends Entity implements Disposable
 			final int w = PEG_SELECTION_ANIMATION_WIDTH;
 			final int h = PEG_SELECTION_ANIMATION_HEIGHT;
 			
-			//create a new animation
-			animation = new Animation(Images.getImage(Assets.ImageGameKey.PegSelections), x, y, w, h);
-			
-			//add animation to sprite sheet
-			super.getSpritesheet().add(selection, animation);
+			//add animation
+			addAnimation(Images.getImage(Assets.ImageGameKey.Selections), selection, x, y, w, h);
 		}
 		
 		//add each hint as an animation
@@ -89,11 +84,17 @@ public class Peg extends Entity implements Disposable
 			final int w = PEG_HINT_ANIMATION_WIDTH;
 			final int h = PEG_HINT_ANIMATION_HEIGHT;
 			
-			//create a new animation
-			animation = new Animation(Images.getImage(Assets.ImageGameKey.PegSelections), x, y, w, h);
-			
-			//add animation to sprite sheet
-			super.getSpritesheet().add(hint, animation);
+			//add animation
+			addAnimation(Images.getImage(Assets.ImageGameKey.Selections), hint, x, y, w, h);
 		}
+	}
+	
+	private void addAnimation(final Bitmap image, final Object key, final int x, final int y, final int w, final int h)
+	{
+		//create a new animation
+		Animation animation = new Animation(image, x, y, w, h);
+		
+		//add animation to sprite sheet
+		super.getSpritesheet().add(key, animation);
 	}
 }

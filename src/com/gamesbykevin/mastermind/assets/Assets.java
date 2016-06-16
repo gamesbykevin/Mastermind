@@ -89,7 +89,10 @@ public class Assets
      */
     public enum ImageGameKey
     {
-    	PegSelections
+    	Background,
+    	Entry,
+    	Hint,
+    	Selections
     }
     
     /**
