@@ -92,6 +92,7 @@ public class Assets
     	Background,
     	Entry,
     	Hint,
+    	Numbers,
     	Selections
     }
     

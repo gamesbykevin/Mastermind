@@ -1,35 +1,24 @@
 package com.gamesbykevin.mastermind.number;
 
+import java.util.ArrayList;
+
 import com.gamesbykevin.androidframework.anim.Animation;
 import com.gamesbykevin.androidframework.base.Entity;
+import com.gamesbykevin.androidframework.resources.Disposable;
 import com.gamesbykevin.androidframework.resources.Images;
 import com.gamesbykevin.mastermind.assets.Assets;
-import com.gamesbykevin.mastermind.panel.GamePanel;
 
 import android.graphics.Canvas;
 
-public class Number extends Entity 
+public class Number extends Entity implements Disposable
 {
-	//the current number
-	private int number = 0;
-	
 	//the dimensions of each number animation
-	private static final int NUMBER_ANIMATION_WIDTH = 65;
-	private static final int NUMBER_ANIMATION_HEIGHT = 100;
+	private static final int NUMBER_ANIMATION_WIDTH = 145;
+	private static final int NUMBER_ANIMATION_HEIGHT = 166;
 	
 	//the dimensions of each number render
-	private static final int NUMBER_RENDER_WIDTH = 32;
-	private static final int NUMBER_RENDER_HEIGHT = 50;
-	
-	/**
-	 * The x-coordinate where we want to render the number
-	 */
-	public static final int NUMBER_X = (int)(GamePanel.WIDTH * .5);
-	
-	/**
-	 * The y-coordinate where we want to render the number
-	 */
-	public static final int NUMBER_Y = GamePanel.HEIGHT - (int)(GamePanel.HEIGHT * .07);
+	public static final int NUMBER_RENDER_WIDTH = 32;
+	public static final int NUMBER_RENDER_HEIGHT = 37;
 	
 	/**
 	 * The key for each number animation
@@ -37,7 +26,8 @@ public class Number extends Entity
 	private enum Key
 	{
 		Zero(0), One(1), Two(2), Three(3), Four(4), 
-		Five(5), Six(6), Seven(7), Eight(8), Nine(9);
+		Five(5), Six(6), Seven(7), Eight(8), Nine(9), 
+		Colon(10);
 		
 		private int x, y = 0;
 		
@@ -48,19 +38,21 @@ public class Number extends Entity
 	}
 	
 	//our array object for each digit in our score
-	private Digit[] numbers;
+	private ArrayList<Digit> numbers;
 
 	/**
 	 * Default constructor
 	 */
 	public Number()
 	{
+		//create a new numbers list
+		this.numbers = new ArrayList<Digit>();
+		
 		//set the dimensions
-		setWidth(NUMBER_ANIMATION_WIDTH);
-		setHeight(NUMBER_ANIMATION_HEIGHT);
+		super.setWidth(NUMBER_RENDER_WIDTH);
+		super.setHeight(NUMBER_RENDER_HEIGHT);
 		
 		//add all number animations
-		/*
 		for (Key key : Key.values())
 		{
 			getSpritesheet().add(
@@ -74,60 +66,59 @@ public class Number extends Entity
 				)
 			);
 		}
-		*/
 		
 		//set default animation
 		getSpritesheet().setKey(Key.Zero);
-		
-		//set a default
-		setNumber(0);
 	}
 	
-	public void setNumber(final int number)
+	@Override
+	public void dispose()
 	{
-		//setNumber(number, NUMBER_X + (int)(Images.getImage(Assets.ImageGameKey.Lives).getWidth() * 1.25), NUMBER_Y);
+		super.dispose();
+		
+		if (this.numbers != null)
+		{
+			this.numbers.clear();
+			this.numbers = null;
+		}
 	}
 	
 	/**
-	 * Assign the number
+	 * Assign the number animation
 	 * @param number The desired number
 	 * @param x The starting x-coordinate
 	 * @param y The y-coordinate
+	 * @throws Exception If one of the characters in the number String are not mapped
 	 */
-	private void setNumber(final int number, int x, final int y)
+	public void setNumber(final String number, int x, final int y) throws Exception
 	{
-		//set the dimensions
-		super.setWidth(NUMBER_RENDER_WIDTH);
-		super.setHeight(NUMBER_RENDER_HEIGHT);
-		
-		//assign the score
-		this.number = number;
-		
-    	//get the score and convert to string
-    	String tmpNumber = String.valueOf(number);
-    	
-		//update the digits
-    	if (this.numbers == null || this.numbers != null && this.numbers.length != tmpNumber.length())
-    		this.numbers = new Digit[tmpNumber.length()];
-    	
     	//assign the y-coordinate
     	setY(y);
     	
-    	//index
-    	int index = 0;
-    	
-    	//assign the animations for each character
-    	for (char test : tmpNumber.toCharArray())
+    	//disable any unnecessary digits
+    	for (int i = number.length(); i < numbers.size(); i++)
     	{
-    		//store the number key
+    		numbers.get(i).setEnabled(false);
+    	}
+    	
+    	//convert string to single characters
+    	char[] characters = number.toCharArray();
+    	
+    	//check each character so we can map the animations
+    	for (int i = 0; i < characters.length; i++)
+    	{
+    		//the key for the identified character
     		Key tmp = null;
     		
     		//identify which animation
-    		switch (test)
+    		switch (characters[i])
     		{
+	    		case ':':
+	    			tmp = Key.Colon;
+	    			break;
+			
 	    		case '0':
-    			default:
-    				tmp = Key.Zero;
+					tmp = Key.Zero;
 	    			break;
 	    			
 	    		case '1':
@@ -165,34 +156,27 @@ public class Number extends Entity
 	    		case '9':
 	    			tmp = Key.Nine;
 	    			break;
+	    			
+				default:
+					throw new Exception("Character not found '" + characters[i] + "'");
     		}
     		
-    		if (this.numbers[index] == null)
+    		//if we are within the array we can reuse
+    		if (i < numbers.size())
     		{
-    			this.numbers[index] = new Digit(x, tmp);
+    			numbers.get(i).setX(x);
+    			numbers.get(i).setKey(tmp);
+    			numbers.get(i).setEnabled(true);
     		}
     		else
     		{
-    			//update
-    			this.numbers[index].x = x;
-    			this.numbers[index].key = tmp;
+    			//else we add a new object to the array
+    			numbers.add(new Digit(x, tmp));
     		}
-    		
-    		//change index
-    		index++;
     		
     		//adjust x-coordinate
     		x += super.getWidth();
     	}
-	}
-	
-	/**
-	 * Get the current number
-	 * @return the current number
-	 */
-	public int getNumber()
-	{
-		return this.number;
 	}
 	
     /**
@@ -201,15 +185,16 @@ public class Number extends Entity
      */
     public void render(final Canvas canvas) throws Exception
     {
-    	//draw lives text
-    	//canvas.drawBitmap(Images.getImage(Assets.ImageGameKey.Lives), NUMBER_X, NUMBER_Y, null);
-    	
-		//set the dimensions
-		super.setWidth(NUMBER_RENDER_WIDTH);
-		super.setHeight(NUMBER_RENDER_HEIGHT);
-		
-    	for (Digit digit : numbers)
-    	{
+    	//check every digit in the list
+		for (int i = 0; i < numbers.size(); i++)
+		{
+			//get the current digit object
+			final Digit digit = numbers.get(i);
+			
+			//if this is not enabled no need to continue
+			if (!digit.isEnabled())
+				return;
+			
     		//assign x-coordinate location
     		setX(digit.x);
     		
@@ -218,7 +203,7 @@ public class Number extends Entity
     		
     		//render animation
     		super.render(canvas);
-    	}
+		}
     }
     
     /**
@@ -226,13 +211,40 @@ public class Number extends Entity
      */
     private class Digit
     {
-    	protected int x;
-    	protected Key key;
+    	//location
+    	private int x;
+    	
+    	//animation to render
+    	private Key key;
+    	
+    	//are we rendering this digit
+    	private boolean enabled = true;
     	
     	private Digit(final int x, final Key key)
     	{
+    		setX(x);
+    		setKey(key);
+    		setEnabled(true);
+    	}
+    	
+    	private final void setX(final int x)
+    	{
     		this.x = x;
+    	}
+    	
+    	private final void setKey(final Key key)
+    	{
     		this.key = key;
+    	}
+    	
+    	private final void setEnabled(final boolean enabled)
+    	{
+    		this.enabled = enabled;
+    	}
+    	
+    	private final boolean isEnabled()
+    	{
+    		return this.enabled;
     	}
     }
 }

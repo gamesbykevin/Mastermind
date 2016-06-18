@@ -69,12 +69,12 @@ public class MenuScreen implements Screen, Disposable
     /**
      * Dimension of the standard menu button
      */
-    public static final int BUTTON_WIDTH = 237;
+    public static final int BUTTON_WIDTH = 200;
     
     /**
      * Dimension of the standard menu button
      */
-    public static final int BUTTON_HEIGHT = 105;
+    public static final int BUTTON_HEIGHT = 87;
     
     /**
      * The size of our icon buttons
@@ -99,7 +99,7 @@ public class MenuScreen implements Screen, Disposable
     /**
      * y-coordinate for the icons
      */
-    public static final int ICON_Y = GamePanel.HEIGHT - (int)(MenuScreen.ICON_DIMENSION * 1.15);
+    public static final int ICON_Y = GamePanel.HEIGHT - (int)(MenuScreen.ICON_DIMENSION * 1.25);
     
     /**
      * Create the menu screen

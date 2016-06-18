@@ -48,27 +48,27 @@ public final class ScreenManager implements Screen, Disposable
     /**
      * The x-coordinate where we want the logo to be displayed
      */
-    public static final int LOGO_X = 20;
+    public static final int LOGO_X = 40;
     
     /**
      * The y-coordinate where we want the logo to be displayed
      */
-    public static final int LOGO_Y = 10;
+    public static final int LOGO_Y = 15;
     
     /**
      * The x-coordinate where we want to start putting the buttons
      */
-    public static final int BUTTON_X = 121;
+    public static final int BUTTON_X = 140;
     
     /**
      * The y-coordinate where we want to start putting the buttons
      */
-    public static final int BUTTON_Y = 125;
+    public static final int BUTTON_Y = 100;
     
     /**
      * The y-coordinate spacing between each button
      */
-    public static final int BUTTON_Y_INCREMENT = MenuScreen.BUTTON_HEIGHT + (int)(MenuScreen.BUTTON_HEIGHT * .1);
+    public static final int BUTTON_Y_INCREMENT = MenuScreen.BUTTON_HEIGHT + (int)(MenuScreen.BUTTON_HEIGHT * .2);
     
     /**
      * The y-coordinate spacing between each button

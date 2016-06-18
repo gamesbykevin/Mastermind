@@ -11,21 +11,31 @@ import android.graphics.Canvas;
 public class Board extends Entity implements ICommon
 {
 	/**
-	 * Animation dimensions of an entry peg
+	 * Animation dimensions of an entry peg board background
 	 */
-	public static final int PEG_ENTRY_ANIMATION_DIMENSION = 80;
+	public static final int PEG_BACKGROUND_ENTRY_ANIMATION_DIMENSION = 80;
 	
 	/**
-	 * Animation dimensions of the hint peg
+	 * Animation dimensions of the hint peg board background
 	 */
-	public static final int PEG_HINT_ANIMATION_DIMENSION = 40;
+	public static final int PEG_BACKGROUND_HINT_ANIMATION_DIMENSION = 40;
+	
+	/**
+	 * The render size of the peg background
+	 */
+	public static final int PEG_BACKGROUND_ENTRY_DIMENSION = 80;
+	
+	/**
+	 * The render size of the hint background
+	 */
+	public static final int PEG_BACKGROUND_HINT_DIMENSION = 40;
 	
 	public enum Key
 	{
 		Entry, Hint
 	}
 	
-	public Board() 
+	public Board()
 	{
 		//add animations
 		super.getSpritesheet().add(Key.Entry, new Animation(Images.getImage(Assets.ImageGameKey.Entry)));
@@ -35,7 +45,7 @@ public class Board extends Entity implements ICommon
 	@Override
 	public void update() throws Exception 
 	{
-		// TODO Auto-generated method stub
+		
 		
 	}
 
