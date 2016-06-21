@@ -36,7 +36,8 @@ public class OptionsScreen implements Screen, Disposable
     //buttons to access each button in the list
     public enum Key
     {
-    	Back, Sound, Vibrate, Controls, Instructions, Facebook, Twitter
+    	Back, Sound, Vibrate, Difficulty, SameColor, 
+    	Instructions, Facebook, Twitter
     }
     
     //the user selection
@@ -64,9 +65,13 @@ public class OptionsScreen implements Screen, Disposable
         y += ScreenManager.BUTTON_Y_INCREMENT;
         addButtonVibrate(x, y);
         
-        //add game controls
+        //add difficulty
         y += ScreenManager.BUTTON_Y_INCREMENT;
-        addButtonControls(x, y);
+        addButtonDifficulty(x, y);
+        
+        //add same color
+        y += ScreenManager.BUTTON_Y_INCREMENT;
+        addButtonSameColor(x, y);
         
         //the back button
         y += ScreenManager.BUTTON_Y_INCREMENT;
@@ -158,14 +163,28 @@ public class OptionsScreen implements Screen, Disposable
         this.buttons.put(Key.Sound, button);
     }
 
-    private void addButtonControls(final int x, final int y)
+    private void addButtonSameColor(final int x, final int y)
     {
         Button button = new Button(Images.getImage(Assets.ImageMenuKey.Button));
-        button.addDescription("Control: Tilt");
-        button.addDescription("Control: Finger");
+        button.addDescription("Same Color: No");
+        button.addDescription("Same Color: Yes");
         button.setX(x);
         button.setY(y);
-    	this.buttons.put(Key.Controls, button);
+    	this.buttons.put(Key.SameColor, button);
+    }
+    
+    private void addButtonDifficulty(final int x, final int y)
+    {
+        Button button = new Button(Images.getImage(Assets.ImageMenuKey.Button));
+        button.addDescription("Colors: 3");
+        button.addDescription("Colors: 4");
+        button.addDescription("Colors: 5");
+        button.addDescription("Colors: 6");
+        button.addDescription("Colors: 7");
+        button.addDescription("Colors: 8");
+        button.setX(x);
+        button.setY(y);
+    	this.buttons.put(Key.Difficulty, button);
     }
     
     private void addButtonVibrate(final int x, final int y)
@@ -239,7 +258,8 @@ public class OptionsScreen implements Screen, Disposable
 						case Back:
 						case Sound:
 						case Vibrate:
-						case Controls:
+						case Difficulty:
+						case SameColor:
 							button.positionText(getScreen().getPaint());
 							break;
 							
@@ -327,7 +347,8 @@ public class OptionsScreen implements Screen, Disposable
 	                break;
 	                
 				case Vibrate:
-				case Controls:
+				case Difficulty:
+				case SameColor:
 					
 					//change index
 					button.setIndex(button.getIndex() + 1);
@@ -416,7 +437,8 @@ public class OptionsScreen implements Screen, Disposable
 	    			case Back:
 	    			case Sound:
 	    			case Vibrate:
-	    			case Controls:
+	    			case Difficulty:
+	    			case SameColor:
 	    				buttons.get(key).render(canvas, getScreen().getPaint());
 	    				break;
 	    				

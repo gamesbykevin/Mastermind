@@ -2,6 +2,7 @@ package com.gamesbykevin.mastermind.board.peg;
 
 import com.gamesbykevin.androidframework.resources.Images;
 import com.gamesbykevin.mastermind.assets.Assets;
+import com.gamesbykevin.mastermind.board.BoardHelper;
 
 public final class Hint extends Peg 
 {
@@ -23,24 +24,24 @@ public final class Hint extends Peg
 	/**
 	 * Animation dimensions of the hint peg
 	 */
-	public static final int PEG_HINT_ANIMATION_WIDTH = 31;
+	private static final int PEG_HINT_ANIMATION_WIDTH = 31;
 	
 	/**
 	 * Animation dimensions of the hint peg
 	 */
-	public static final int PEG_HINT_ANIMATION_HEIGHT = 32;
+	private static final int PEG_HINT_ANIMATION_HEIGHT = 32;
+	
+	/**
+	 * The ratio compared to the board background hint
+	 */
+	public static final float SIZE_RATIO = 0.5f;
 	
 	/**
 	 * Dimensions of the peg hint
 	 */
-	public static final int PEG_HINT_WIDTH = 16;
+	public static int PEG_HINT_DIMENSION = (int)(BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION * SIZE_RATIO);
 	
-	/**
-	 * Dimensions of the peg hint
-	 */
-	public static final int PEG_HINT_HEIGHT = 16;
-	
-	protected Hint()
+	public Hint()
 	{
 		//add each hint as an animation
 		for (Key key : Key.values())
@@ -58,7 +59,13 @@ public final class Hint extends Peg
 		setAnimation(Key.MatchColor);
 		
 		//set a dimension
-		setWidth(PEG_HINT_WIDTH);
-		setHeight(PEG_HINT_HEIGHT);
+		setWidth(PEG_HINT_DIMENSION);
+		setHeight(PEG_HINT_DIMENSION);
+	}
+	
+	@Override
+	public void setAnimation(final Object key)
+	{
+		super.getSpritesheet().setKey(key);
 	}
 }

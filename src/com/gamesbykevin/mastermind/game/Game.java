@@ -11,6 +11,10 @@ import com.gamesbykevin.androidframework.awt.Button;
 import com.gamesbykevin.androidframework.level.Select;
 import com.gamesbykevin.androidframework.resources.Images;
 import com.gamesbykevin.mastermind.assets.Assets;
+import com.gamesbykevin.mastermind.board.Board;
+import com.gamesbykevin.mastermind.board.BoardHelper;
+import com.gamesbykevin.mastermind.board.peg.Hint;
+import com.gamesbykevin.mastermind.board.peg.Selection;
 import com.gamesbykevin.mastermind.number.Number;
 import com.gamesbykevin.mastermind.panel.GamePanel;
 import com.gamesbykevin.mastermind.screen.OptionsScreen;
@@ -39,6 +43,9 @@ public final class Game implements IGame
     //object for rendering a number
     private Number number;
     
+    //the board of our game
+    private Board board;
+    
     /**
      * Create our game object
      * @param screen The main screen
@@ -51,6 +58,80 @@ public final class Game implements IGame
         
         //create new number object
         this.number = new Number();
+        
+        //check the options to set the size of our board
+        final int size;
+        
+        //depending on difficulty set the board size and peg dimensions
+        switch (getScreen().getScreenOptions().getIndex(OptionsScreen.Key.Difficulty))
+        {
+        	//3
+	        case 0:
+	        	//set board selection size
+	        	size = BoardHelper.SIZE_MINIMUM;
+	        	
+	        	//set the dimensions of the pegs themselves
+	        	BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION = BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION_MAX;
+	        	break;
+	        	
+	        //4
+	        case 1:
+	        	//set board selection size
+	        	size = BoardHelper.SIZE_MINIMUM + 1;
+	        	
+	        	//set the dimensions of the pegs themselves
+	        	BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION = BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION_MAX;
+	        	break;
+	        	
+	        //5
+	        case 2:
+	        	//set board selection size
+	        	size = BoardHelper.SIZE_MINIMUM + 2;
+	        	
+	        	//set the dimensions of the pegs themselves
+	        	BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION = BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION_MID;
+	        	break;
+	        	
+	        //6
+	        case 3:
+	        	//set board selection size
+	        	size = BoardHelper.SIZE_MINIMUM + 3;
+	        	
+	        	//set the dimensions of the pegs themselves
+	        	BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION = BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION_MID;
+	        	break;
+	        	
+	        //7
+	        case 4:
+	        	//set board selection size
+	        	size = BoardHelper.SIZE_MINIMUM + 4;
+	        	
+	        	//set the dimensions of the pegs themselves
+	        	BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION = BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION_MIN;
+	        	break;
+	        	
+	        //8
+	        case 5:
+	        	//set board selection size
+	        	size = BoardHelper.SIZE_MINIMUM + 5;
+	        	
+	        	//set the dimensions of the pegs themselves
+	        	BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION = BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION_MIN;
+	        	break;
+	        	
+        	default:
+        		throw new Exception("Key not handled here - " + getScreen().getScreenOptions().getIndex(OptionsScreen.Key.Difficulty));
+        }
+        
+    	//set the dimensions of the hints
+    	BoardHelper.PEG_BACKGROUND_HINT_DIMENSION = (int)(BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION * BoardHelper.PEG_HINT_SIZE_RATIO);
+    	
+    	//now set the dimensions of the selection and hint
+    	Selection.PEG_SELECTION_DIMENSION = (int)(BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION * Selection.SIZE_RATIO);
+    	Hint.PEG_HINT_DIMENSION = 			(int)(BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION * Hint.SIZE_RATIO);
+    	
+        //create a new board with the appropriate size
+        this.board = new Board(size);
     }
     
     /**
@@ -63,27 +144,21 @@ public final class Game implements IGame
     }
     
     /**
+     * Get the board
+     * @return Object containing all the selections/hints etc....
+     */
+    public Board getBoard()
+    {
+    	return this.board;
+    }
+    
+    /**
      * Get the main screen object reference
      * @return The main screen object reference
      */
     public ScreenManager getScreen()
     {
         return this.screen;
-    }
-    
-    /**
-     * Reset the game
-     */
-    private void reset()
-    {
-    	//make sure we have notified first
-    	if (GameHelper.NOTIFY)
-    	{
-        	//flag reset false
-    		GameHelper.RESET = false;
-    		GameHelper.WIN = false;
-    		GameHelper.LOSE = false;
-    	}
     }
     
     /**
@@ -109,8 +184,8 @@ public final class Game implements IGame
     @Override
     public void update(final int action, final float x, final float y) throws Exception
     {
-    	//if we haven't notified we can't continue
-    	if (!GameHelper.NOTIFY)
+    	//if we can't play, don't continue
+    	if (!GameHelper.canPlay())
     		return;
     	
 		if (action == MotionEvent.ACTION_UP)
@@ -119,7 +194,7 @@ public final class Game implements IGame
     	}
     	else if (action == MotionEvent.ACTION_DOWN)
 		{
-    		
+    		getBoard().check((int)x, (int)y);
 		}
 		else if (action == MotionEvent.ACTION_MOVE)
     	{
@@ -133,16 +208,8 @@ public final class Game implements IGame
      */
     public void update() throws Exception
     {
-    	//if the game is over
-    	if (GameHelper.RESET)
-        {
-        	//reset the game
-        	reset();
-        }
-        else
-        {
-    		GameHelper.update(this);
-        }
+    	//update our game objects
+		GameHelper.update(this);
     }
     
     /**
@@ -186,7 +253,16 @@ public final class Game implements IGame
     {
         this.paint = null;
         
-    	if (number != null)
-    		number = null;
+    	if (this.number != null)
+    	{
+    		this.number.dispose();
+    		this.number = null;
+    	}
+    	
+    	if (this.board != null)
+    	{
+    		this.board.dispose();
+    		this.board = null;
+    	}
     }
 }

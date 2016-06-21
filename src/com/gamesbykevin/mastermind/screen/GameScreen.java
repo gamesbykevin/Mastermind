@@ -43,7 +43,8 @@ public class GameScreen implements Screen, Disposable
             this.game = new Game(getScreen());
         
         //reset loading notification
-        GameHelper.NOTIFY = false;
+        GameHelper.NOTIFY_RESET = true;
+        GameHelper.RESET = true;
         
         //flag game over true
         GameHelper.GAMEOVER = true;

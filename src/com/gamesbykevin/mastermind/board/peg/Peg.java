@@ -1,16 +1,18 @@
 package com.gamesbykevin.mastermind.board.peg;
 
 import com.gamesbykevin.androidframework.anim.Animation;
-import com.gamesbykevin.androidframework.base.Entity;
+import com.gamesbykevin.mastermind.entity.Entity;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 
-public class Peg extends Entity 
+public abstract class Peg extends Entity 
 {
+	/**
+	 * default constructor
+	 */
 	protected Peg() 
 	{
-		//default constructor
+		//call parent constructor
 		super();
 	}
 
@@ -34,32 +36,5 @@ public class Peg extends Entity
 		}
 	}
 	
-	public void setAnimation(final Selection.Key key)
-	{
-		super.getSpritesheet().setKey(key);
-	}
-	
-	public void setAnimation(final Hint.Key key)
-	{
-		super.getSpritesheet().setKey(key);
-	}
-	
-	@Override
-	public void render(final Canvas canvas)
-	{
-		//store coordinates before we offset
-		final double x = getX();
-		final double y = getY();
-		
-		//offset coordinates
-		setX(x - (getWidth() / 2));
-		setY(y - (getHeight() / 2));
-		
-		//now we can render
-		render(canvas);
-		
-		//restore location
-		setX(x);
-		setY(y);
-	}
+	public abstract void setAnimation(final Object key);
 }

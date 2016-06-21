@@ -272,7 +272,7 @@ public class GameoverScreen implements Screen, Disposable
 					GameHelper.RESET = true;
 	                
 	                //reset loading notification
-					GameHelper.NOTIFY = false;
+					GameHelper.NOTIFY_RESET = true;
 					
 	                //move back to the game
 					getScreen().setState(ScreenManager.State.Running);

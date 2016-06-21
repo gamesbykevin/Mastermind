@@ -26,14 +26,14 @@ public final class GameHelper
 	public static boolean LOSE = false;
 	
 	/**
-	 * Do we reset the game?
+	 * Do we notify that we are reseting the game?
 	 */
-	public static boolean RESET = false;
+	public static boolean NOTIFY_RESET = true;
 	
 	/**
-	 * Should we display the loading screen to the user
+	 * Do we reset the game?
 	 */
-	public static boolean NOTIFY = false;
+	public static boolean RESET = true;
 	
 	/**
 	 * Is the game over?
@@ -46,7 +46,24 @@ public final class GameHelper
      */
     public static final void update(final Game game) throws Exception
     {
-    	
+    	if (RESET)
+    	{
+    		//reset board
+    		game.getBoard().reset();
+    		
+    		//add default entry
+    		game.getBoard().add();
+    		
+    		//flag reset false now that we have finished
+    		RESET = false;
+    		
+			//flag false now that we have finished
+			NOTIFY_RESET = false;
+    	}
+    	else
+    	{
+    		game.getBoard().update();
+    	}
     }
     
     /**
@@ -57,17 +74,25 @@ public final class GameHelper
      */
     public static final void render(final Canvas canvas, final Game game) throws Exception
     {
-    	if (!NOTIFY)
+    	if (!canPlay())
     	{
 			//render loading screen
 			canvas.drawBitmap(Images.getImage(Assets.ImageMenuKey.Splash), 0, 0, null);
-			
-			//flag that the user has been notified
-			NOTIFY = true;
     	}
     	else
     	{
-    		
+    		//render the board if it exists
+    		if (game.getBoard() != null)
+    			game.getBoard().render(canvas);
     	}
+    }
+    
+    /**
+     * Can the player play the game?
+     * @return true if we are not resetting the game, false otherwise
+     */
+    public static final boolean canPlay()
+    {
+    	return (!NOTIFY_RESET && !RESET);
     }
 }

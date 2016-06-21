@@ -90,6 +90,8 @@ public class Assets
     public enum ImageGameKey
     {
     	Background,
+    	ConfirmEntryEnabled,
+    	ConfirmEntryDisabled,
     	Entry,
     	Hint,
     	Numbers,

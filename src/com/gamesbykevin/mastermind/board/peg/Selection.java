@@ -5,48 +5,80 @@ import com.gamesbykevin.mastermind.assets.Assets;
 
 public final class Selection extends Peg
 {
+	/**
+	 * All the possible selections
+	 */
 	public enum Key
 	{
-		Red(0,0), White(1,0), 
-		Black(0,1), LightPurple(1,1), 
-		Gray(0,2), DarkPurple(1,2), 
-		Blue(0,3), Green(1,3), 
-		Yellow(0,4), Orange(1,4);
+		Red(0,0), 
+		White(1,0), 
+		Black(0,1), 
+		//LightPurple(1,1), 
+		//Gray(0,2), 
+		DarkPurple(1,2), 
+		Blue(0,3), 
+		Green(1,3), 
+		Yellow(0,4), 
+		Orange(1,4);
 		
 		//cell coordinate
 		private final int col, row;
 		
+		private boolean enabled;
+		
 		private Key(final int col, final int row)
 		{
+			//store the location on the sprite sheet
 			this.col = col;
 			this.row = row;
+			
+			//flag true at default
+			setEnabled(true);
+		}
+		
+		/**
+		 * Is this selection enabled?
+		 * @return true if the user can select this color, false otherwise
+		 */
+		public boolean isEnabled()
+		{
+			return this.enabled;
+		}
+		
+		/**
+		 * Flag the selection enabled.
+		 * @param enabled true if the user can select this color, false otherwise
+		 */
+		public void setEnabled(final boolean enabled)
+		{
+			this.enabled = enabled;
 		}
 	}
 	
+	/**
+	 * Animation dimensions of a peg
+	 */
+	private static final int PEG_SELECTION_ANIMATION_WIDTH = 64;
 	
 	/**
 	 * Animation dimensions of a peg
 	 */
-	public static final int PEG_SELECTION_ANIMATION_WIDTH = 64;
+	private static final int PEG_SELECTION_ANIMATION_HEIGHT = 64;
 	
 	/**
-	 * Animation dimensions of a peg
+	 * The ratio compared to the board background selection
 	 */
-	public static final int PEG_SELECTION_ANIMATION_HEIGHT = 64;
-	
-	
-	/**
-	 * Dimensions of the peg selection
-	 */
-	public static final int PEG_SELECTION_WIDTH = 32;
+	public static final float SIZE_RATIO = 0.9f;
 	
 	/**
 	 * Dimensions of the peg selection
 	 */
-	public static final int PEG_SELECTION_HEIGHT = 32;
+	public static int PEG_SELECTION_DIMENSION;
 	
-	
-	protected Selection() 
+	/**
+	 * Default Constructor
+	 */
+	public Selection() 
 	{
 		//add each selection as an animation
 		for (Key key : Key.values())
@@ -62,9 +94,11 @@ public final class Selection extends Peg
 		
 		//set a default selection
 		setAnimation(Key.Black);
-		
-		//set a dimension
-		setWidth(PEG_SELECTION_WIDTH);
-		setHeight(PEG_SELECTION_HEIGHT);
+	}
+	
+	@Override
+	public void setAnimation(final Object key)
+	{
+		super.getSpritesheet().setKey(key);
 	}
 }
