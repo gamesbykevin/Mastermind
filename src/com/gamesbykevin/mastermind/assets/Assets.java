@@ -75,8 +75,8 @@ public class Assets
     	Button, 
     	Cancel, 
     	Confirm, 
+    	ExitText,
     	Facebook, 
-    	HomePage,
     	Instructions,
     	Logo, 
     	Splash, 
@@ -89,11 +89,15 @@ public class Assets
      */
     public enum ImageGameKey
     {
+    	Attempts,
     	Background,
     	ConfirmEntryEnabled,
     	ConfirmEntryDisabled,
     	Entry,
     	Hint,
+    	HomeNavigation,
+    	ScreenInstructions,
+    	InGameLogo,
     	Numbers,
     	Selections
     }

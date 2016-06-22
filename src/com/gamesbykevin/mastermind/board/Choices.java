@@ -24,7 +24,7 @@ public class Choices implements ICommon
 	/**
 	 * The dimension of the choice
 	 */
-	private static final int DIMENSION = 70;
+	public static final int DIMENSION = 70;
 	
 	/**
 	 * The starting coordinates for the choices
@@ -134,7 +134,15 @@ public class Choices implements ICommon
 				
 				//if the entry is already complete we can't check this
 				if (this.entries.getEntry().isComplete())
+				{
+					//if the entries are complete, don't continue
 					break;
+				}
+				else
+				{
+					//else disable the confirmation button
+					enableConfirmation(false);
+				}
 				
 				//assign the coordinates
 				getSelection().setX(this.points[i].x);

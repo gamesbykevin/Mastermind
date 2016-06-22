@@ -30,7 +30,12 @@ public class Entries implements ICommon
 	/**
 	 * The starting y-coordinate for the first entry
 	 */
-	public static final int START_Y = GamePanel.HEIGHT - (BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION * 2);
+	public static final int START_Y = GamePanel.HEIGHT - (BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION * 3);
+	
+	/**
+	 * How much space do we create between entries
+	 */
+	private static final float ADD_ENTRY_Y_INCREMENT_RATIO = 1.2f;
 	
 	//our board reference object
 	private final Board board;
@@ -101,12 +106,23 @@ public class Entries implements ICommon
 		//create a new entry
 		Entry entry = new Entry();
 		
-		//set the starting position
-		entry.setX(START_X);
-		entry.setY(
-			START_Y - 
-			(int)(getEntries().size() * (BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION * 1.25)) 
-		);
+		//set the starting position accordingly
+		if (getEntries().isEmpty())
+		{
+			entry.setX(START_X);
+			entry.setY(
+				START_Y - 
+				(int)(getEntries().size() * (BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION * ADD_ENTRY_Y_INCREMENT_RATIO)) 
+			);
+		}
+		else
+		{
+			entry.setX(START_X);
+			entry.setY(
+				getEntry().getY() - 
+				(int)(BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION * ADD_ENTRY_Y_INCREMENT_RATIO) 
+			);
+		}
 		
 		//set the size of the entry
 		entry.setSize(size);
@@ -187,8 +203,9 @@ public class Entries implements ICommon
 					//find our hints
 					entry.analyze(board.getSolution());
 					
-					//add another entry
-					board.add();
+					//if we did not solve yet, add another entry
+					if (!entry.isSolved())
+						board.add();
 				}
 			}
 		}
@@ -213,8 +230,6 @@ public class Entries implements ICommon
 		this.checkX = x;
 		this.checkY = y;
 	}
-	
-	
 	
 	@Override
 	public void reset() 

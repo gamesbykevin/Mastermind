@@ -166,8 +166,8 @@ public class OptionsScreen implements Screen, Disposable
     private void addButtonSameColor(final int x, final int y)
     {
         Button button = new Button(Images.getImage(Assets.ImageMenuKey.Button));
-        button.addDescription("Same Color: No");
-        button.addDescription("Same Color: Yes");
+        button.addDescription("No Repeat");
+        button.addDescription("Repeat Colors");
         button.setX(x);
         button.setY(y);
     	this.buttons.put(Key.SameColor, button);

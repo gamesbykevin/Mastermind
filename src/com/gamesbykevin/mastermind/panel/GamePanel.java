@@ -243,15 +243,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Di
             if (RANDOM == null)
                 RANDOM = new Random(System.nanoTime());
             
-            //create the thread if it doesn't exist
-            if (getThread() == null)
-        		this.thread = new MainThread(getHolder(), this);
+            //create new thread
+    		this.thread = new MainThread(getHolder(), this);
             
-            //if the thread isn't running, start it
-            if (!getThread().isRunning())
-            	getThread().start();
+            //start the thread
+        	getThread().start();
             
-            //flag the thread as not paused
+            //make sure not paused
             getThread().setPause(false);
             
             //if we haven't calculated the ratio yet

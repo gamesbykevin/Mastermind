@@ -23,6 +23,9 @@ public class Entry implements Disposable
 	//did we analyze this entry?
 	private boolean analyzed = false;
 	
+	//does this entry solve the game
+	private boolean solved = false;
+	
 	/**
 	 * Default Constructor
 	 */
@@ -33,6 +36,23 @@ public class Entry implements Disposable
 		
 		//create a new list of hints
 		this.hints = new ArrayList<Hint.Key>();
+	}
+	
+	/**
+	 * Mark the entry as solved
+	 */
+	public void markSolved()
+	{
+		this.solved = true;
+	}
+	
+	/**
+	 * Is the entry solved?
+	 * @return true if all selections are correct and in the correct location, false otherwise
+	 */
+	public boolean isSolved()
+	{
+		return this.solved;
 	}
 	
 	/**
@@ -266,6 +286,10 @@ public class Entry implements Disposable
 		{
 			addHint(Hint.Key.MatchColor);
 		}
+		
+		//if each selection is the correct one, this entry solved the puzzle 
+		if (this.getSelections().size() == match)
+			this.markSolved();
 		
 		//flag this as analyzed
 		this.markAnalyzed();

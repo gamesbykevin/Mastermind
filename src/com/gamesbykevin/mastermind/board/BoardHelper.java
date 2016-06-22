@@ -1,6 +1,7 @@
 package com.gamesbykevin.mastermind.board;
 
 import com.gamesbykevin.mastermind.board.entries.Entry;
+import com.gamesbykevin.mastermind.panel.GamePanel;
 
 public class BoardHelper 
 {
@@ -17,7 +18,7 @@ public class BoardHelper
 	/**
 	 * The render size of the peg background assuming we have the maximum board entries
 	 */
-	public static final int PEG_BACKGROUND_ENTRY_DIMENSION_MIN = 30;
+	public static final int PEG_BACKGROUND_ENTRY_DIMENSION_MIN = 35;
 	
 	/**
 	 * The render size of the peg background 
@@ -48,6 +49,18 @@ public class BoardHelper
 	 * How many hints can we show on the same row for a single entry
 	 */
 	private static final int HINTS_PER_ROW = 4;
+	
+	/**
+	 * The minimum y-coordinate for our most recent entry.<br>
+	 * We do this because we want to keep the most recent entry viewable on the screen
+	 */
+	public static final int ENTRY_Y_MIN = (int)(PEG_BACKGROUND_ENTRY_DIMENSION_MIN * 3.25);
+	
+	/**
+	 * The maximum y-coordinate for our first entry.<br>
+	 * We do this because we want to keep the first entry viewable on the screen
+	 */
+	public static final int ENTRY_Y_MAX = GamePanel.HEIGHT - (PEG_BACKGROUND_ENTRY_DIMENSION_MIN * 3);
 	
 	public static final int getSelectionX(final Entry entry, final int col)
 	{

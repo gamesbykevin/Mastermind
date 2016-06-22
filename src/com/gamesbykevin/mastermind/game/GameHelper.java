@@ -3,6 +3,9 @@ package com.gamesbykevin.mastermind.game;
 import com.gamesbykevin.androidframework.resources.Audio;
 import com.gamesbykevin.androidframework.resources.Images;
 import com.gamesbykevin.mastermind.assets.Assets;
+import com.gamesbykevin.mastermind.board.Choices;
+import com.gamesbykevin.mastermind.board.entries.Entries;
+import com.gamesbykevin.mastermind.screen.MenuScreen;
 import com.gamesbykevin.mastermind.screen.OptionsScreen;
 import com.gamesbykevin.mastermind.screen.ScreenManager;
 import com.gamesbykevin.mastermind.thread.MainThread;
@@ -40,6 +43,61 @@ public final class GameHelper
 	 */
 	public static boolean GAMEOVER = false;
 	
+	/**
+	 * Do we display the screenshot instructions
+	 */
+	public static boolean INGAME_INSTRUCTIONS = false;
+	
+	/**
+	 * Do we go to the exit game screen
+	 */
+	public static boolean EXIT_GAME = false;
+	
+    /**
+     * Size of in-game buttons
+     */
+	public static final int BUTTON_DIMENSION = Choices.DIMENSION;
+	
+    /**
+     * Location of the home button
+     */
+	public static final int HOME_X = Entries.START_X;
+    
+    /**
+     * Location of the home button
+     */
+	public static final int HOME_Y = 10;
+    
+    /**
+     * Location of the in game instructions button
+     */
+	public static final int INSTRUCTION_X = Entries.START_X + (int)(BUTTON_DIMENSION * 1.20);
+    
+    /**
+     * Location of the in game instructions button
+     */
+	public static final int INSTRUCTION_Y = HOME_Y;
+	
+	/**
+	 * Location of the in game logo
+	 */
+	public static final int LOGO_X = INSTRUCTION_X + (int)(BUTTON_DIMENSION * 1.15);
+	
+	/**
+	 * Location of the in game logo
+	 */
+	public static final int LOGO_Y = HOME_Y + (BUTTON_DIMENSION / 3);
+	
+	/**
+	 * Location of the attempts text
+	 */
+	public static final int ATTEMPTS_X = LOGO_X;
+	
+	/**
+	 * Location of the attempts text
+	 */
+	public static final int ATTEMPTS_Y = HOME_Y + (int)(BUTTON_DIMENSION * 1.15);
+	
     /**
      * Update game
      * @throws Exception 
@@ -62,6 +120,23 @@ public final class GameHelper
     	}
     	else
     	{
+    		//don't continue if showing in game instructions
+    		if (INGAME_INSTRUCTIONS)
+    			return;
+    		
+    		//if we want to exit the current game
+    		if (EXIT_GAME)
+    		{
+    			//flag false
+    			EXIT_GAME = false;
+    			
+    			//set exit screen state
+    			game.getScreen().setState(ScreenManager.State.Exit);
+    			
+    			//no need to continue
+    			return;
+    		}
+    		
     		game.getBoard().update();
     	}
     }
@@ -84,6 +159,21 @@ public final class GameHelper
     		//render the board if it exists
     		if (game.getBoard() != null)
     			game.getBoard().render(canvas);
+    		
+    		//render our in game menu buttons
+    		if (game.getButtonHome() != null)
+    			game.getButtonHome().render(canvas);
+    		if (game.getButtonInstructions() != null)
+    			game.getButtonInstructions().render(canvas);
+    		
+    		//draw the game logo
+    		canvas.drawBitmap(Images.getImage(Assets.ImageGameKey.InGameLogo), LOGO_X, LOGO_Y, null);
+    		
+    		//draw the attempts
+    		canvas.drawBitmap(Images.getImage(Assets.ImageGameKey.Attempts), ATTEMPTS_X, ATTEMPTS_Y, null);
+    		
+    		if (game.getNumber() != null)
+    			game.getNumber().render(canvas);
     	}
     }
     

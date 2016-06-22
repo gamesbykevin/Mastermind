@@ -39,8 +39,7 @@ public class GameScreen implements Screen, Disposable
      */
     public void createGame() throws Exception
     {
-        if (getGame() == null)
-            this.game = new Game(getScreen());
+        this.game = new Game(getScreen());
         
         //reset loading notification
         GameHelper.NOTIFY_RESET = true;

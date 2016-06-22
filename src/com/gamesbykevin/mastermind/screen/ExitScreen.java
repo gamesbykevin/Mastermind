@@ -1,18 +1,12 @@
 package com.gamesbykevin.mastermind.screen;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.view.MotionEvent;
-
 import com.gamesbykevin.androidframework.awt.Button;
-import com.gamesbykevin.androidframework.resources.Audio;
 import com.gamesbykevin.androidframework.resources.Disposable;
 import com.gamesbykevin.androidframework.resources.Images;
 import com.gamesbykevin.androidframework.screen.Screen;
 import com.gamesbykevin.mastermind.assets.Assets;
-import com.gamesbykevin.mastermind.panel.GamePanel;
-
 import java.util.HashMap;
 
 /**
@@ -21,19 +15,8 @@ import java.util.HashMap;
  */
 public class ExitScreen implements Screen, Disposable
 {
-    /**
-     * Custom message displayed on screen
-     */
-    private static final String MESSAGE = "Go back to menu?";
-    
-    //where our message is to be rendered
-    private final int messageX, messageY;
-    
     //our main screen reference
     private final ScreenManager screen;
-    
-    //object to paint background
-    private Paint paint;
     
     //all of the buttons for the player to control
     private HashMap<Assets.ImageMenuKey, Button> buttons;
@@ -41,46 +24,39 @@ public class ExitScreen implements Screen, Disposable
     /**
      * The dimensions of the buttons
      */
-    private static final int BUTTON_DIMENSION = 144;
+    private static final int BUTTON_DIMENSION = 128;
     
     /**
-     * The size of our font
+     * The location of our image text
      */
-    private static final float DEFAULT_TEXT_SIZE = 72f;
+    private static final int TEXT_X = 40;
+    
+    /**
+     * The location of our image text
+     */
+    private static final int TEXT_Y = 240;
     
     public ExitScreen(final ScreenManager screen)
     {
         //store our parent reference
         this.screen = screen;
         
-        //create paint text object
-        this.paint = new Paint(screen.getPaint());
-        
-        //set the text size
-        this.paint.setTextSize(DEFAULT_TEXT_SIZE);
-        
-        //create temporary rectangle
-        Rect tmp = new Rect();
-        
-        //get the rectangle around the message
-        paint.getTextBounds(MESSAGE, 0, MESSAGE.length(), tmp);
-        
-        //calculate where text message is to be rendered
-        messageX = (GamePanel.WIDTH / 2) - (tmp.width() / 2);
-        messageY = (GamePanel.HEIGHT / 2) - (tmp.height() / 2);
-        
         //create buttons
         this.buttons = new HashMap<Assets.ImageMenuKey, Button>();
         this.buttons.put(Assets.ImageMenuKey.Cancel, new Button(Images.getImage(Assets.ImageMenuKey.Cancel)));
         this.buttons.put(Assets.ImageMenuKey.Confirm, new Button(Images.getImage(Assets.ImageMenuKey.Confirm)));
         
+        //dimensions of our text image
+        final int w = Images.getImage(Assets.ImageMenuKey.ExitText).getWidth();
+        final int h = Images.getImage(Assets.ImageMenuKey.ExitText).getHeight();
+        
         //position the buttons below the message
-        final int y = messageY + tmp.height();
+        final int y = TEXT_Y + (h * 2);
         
         //position buttons
-        this.buttons.get(Assets.ImageMenuKey.Confirm).setX(messageX);
+        this.buttons.get(Assets.ImageMenuKey.Confirm).setX(TEXT_X);
         this.buttons.get(Assets.ImageMenuKey.Confirm).setY(y);
-        this.buttons.get(Assets.ImageMenuKey.Cancel).setX(messageX + tmp.width() - BUTTON_DIMENSION);
+        this.buttons.get(Assets.ImageMenuKey.Cancel).setX(TEXT_X + w - BUTTON_DIMENSION);
         this.buttons.get(Assets.ImageMenuKey.Cancel).setY(y);
         
         //set the bounds of each button
@@ -157,12 +133,10 @@ public class ExitScreen implements Screen, Disposable
     @Override
     public void render(final Canvas canvas) throws Exception
     {
-        if (paint != null)
-        {
-            //draw text
-            canvas.drawText(MESSAGE, messageX, messageY, paint);
-        }
+        //draw text
+        canvas.drawBitmap(Images.getImage(Assets.ImageMenuKey.ExitText), TEXT_X, TEXT_Y, null);
         
+        //render buttons
         buttons.get(Assets.ImageMenuKey.Cancel).render(canvas);
         buttons.get(Assets.ImageMenuKey.Confirm).render(canvas);
     }
@@ -184,8 +158,5 @@ public class ExitScreen implements Screen, Disposable
             buttons.clear();
             buttons = null;
         }
-        
-        if (paint != null)
-            paint = null;
     }
 }

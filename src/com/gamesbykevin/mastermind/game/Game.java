@@ -13,10 +13,12 @@ import com.gamesbykevin.androidframework.resources.Images;
 import com.gamesbykevin.mastermind.assets.Assets;
 import com.gamesbykevin.mastermind.board.Board;
 import com.gamesbykevin.mastermind.board.BoardHelper;
+import com.gamesbykevin.mastermind.board.entries.Entries;
 import com.gamesbykevin.mastermind.board.peg.Hint;
 import com.gamesbykevin.mastermind.board.peg.Selection;
 import com.gamesbykevin.mastermind.number.Number;
 import com.gamesbykevin.mastermind.panel.GamePanel;
+import com.gamesbykevin.mastermind.screen.MenuScreen;
 import com.gamesbykevin.mastermind.screen.OptionsScreen;
 import com.gamesbykevin.mastermind.screen.ScreenManager;
 
@@ -46,6 +48,15 @@ public final class Game implements IGame
     //the board of our game
     private Board board;
     
+    //did we move our finger on the screen
+    private boolean moved = false;
+    
+    //store the coordinate where our fingers is
+    private float moveY;
+    
+    //button for home page and instructions
+    private Button home, instructions;
+    
     /**
      * Create our game object
      * @param screen The main screen
@@ -56,8 +67,9 @@ public final class Game implements IGame
         //our main screen object reference
         this.screen = screen;
         
-        //create new number object
+        //create new number object and position it
         this.number = new Number();
+        this.number.setNumber(0, GameHelper.ATTEMPTS_X + Images.getImage(Assets.ImageGameKey.Attempts).getWidth() + 5, GameHelper.ATTEMPTS_Y - 5);
         
         //check the options to set the size of our board
         final int size;
@@ -131,7 +143,54 @@ public final class Game implements IGame
     	Hint.PEG_HINT_DIMENSION = 			(int)(BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION * Hint.SIZE_RATIO);
     	
         //create a new board with the appropriate size
-        this.board = new Board(size);
+        this.board = new Board(getNumber(), size);
+        
+    	//create buttons for in game navigation
+        createButtons();
+    }
+    
+    /**
+     * Create the in game menu buttons
+     */
+    private void createButtons()
+    {
+    	//create a new button
+        this.home = new Button(Images.getImage(Assets.ImageGameKey.HomeNavigation));
+    	
+    	//assign the location
+        this.home.setX(GameHelper.HOME_X);
+        this.home.setY(GameHelper.HOME_Y);
+    	
+    	//assign dimensions
+        this.home.setWidth(GameHelper.BUTTON_DIMENSION);
+        this.home.setHeight(GameHelper.BUTTON_DIMENSION);
+    	
+    	//update the bounds of the button
+        this.home.updateBounds();
+    	
+    	//create a new button
+        this.instructions = new Button(Images.getImage(Assets.ImageGameKey.ScreenInstructions));
+    	
+    	//assign the location
+    	this.instructions.setX(GameHelper.INSTRUCTION_X);
+    	this.instructions.setY(GameHelper.INSTRUCTION_Y);
+    	
+    	//assign dimensions
+    	this.instructions.setWidth(GameHelper.BUTTON_DIMENSION);
+    	this.instructions.setHeight(GameHelper.BUTTON_DIMENSION);
+    	
+    	//update the bounds of the button
+    	this.instructions.updateBounds();
+    }
+    
+    public Button getButtonHome()
+    {
+    	return this.home;
+    }
+    
+    public Button getButtonInstructions()
+    {
+    	return this.instructions;
     }
     
     /**
@@ -188,17 +247,60 @@ public final class Game implements IGame
     	if (!GameHelper.canPlay())
     		return;
     	
+		//if we are to show in game instructions
+		if (GameHelper.INGAME_INSTRUCTIONS)
+		{
+			if (action == MotionEvent.ACTION_UP)
+			{
+				//flag display instructions false
+				GameHelper.INGAME_INSTRUCTIONS = false;
+			}
+			
+			//no need to continue
+			return;
+		}
+		
 		if (action == MotionEvent.ACTION_UP)
     	{
+			//flag moved false
+			this.moved = false;
 			
+			//stop the velocity
+			this.getBoard().setDY(0);
+			
+			if (this.getButtonHome().contains(x, y))
+				GameHelper.EXIT_GAME = true;
+			if (this.getButtonInstructions().contains(x, y))
+				GameHelper.INGAME_INSTRUCTIONS = true;
     	}
     	else if (action == MotionEvent.ACTION_DOWN)
 		{
-    		getBoard().check((int)x, (int)y);
+    		//make sure we aren't moving first
+    		if (!this.moved)
+    			getBoard().check((int)x, (int)y);
 		}
 		else if (action == MotionEvent.ACTION_MOVE)
     	{
-			
+			//if we have not yet moved
+			if (!this.moved)
+			{
+				//flag moving as true
+				this.moved = true;
+				
+				//store the start coordinate
+				this.moveY = y;
+			}
+			else
+			{
+				//calculate the difference
+				float yDiff = (y - this.moveY) * 2;
+				
+				//update the y-coordinate(s) of the existing entries
+				this.getBoard().setDY(yDiff);
+				
+				//update the move coordinate
+				this.moveY = y;
+			}
     	}
     }
     
@@ -263,6 +365,18 @@ public final class Game implements IGame
     	{
     		this.board.dispose();
     		this.board = null;
+    	}
+    	
+    	if (this.home != null)
+    	{
+    		this.home.dispose();
+    		this.home = null;
+    	}
+    	
+    	if (this.instructions != null)
+    	{
+    		this.instructions.dispose();
+    		this.instructions = null;
     	}
     }
 }

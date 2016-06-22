@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 
 import com.gamesbykevin.androidframework.awt.Button;
-import com.gamesbykevin.androidframework.resources.Audio;
 import com.gamesbykevin.androidframework.resources.Disposable;
 import com.gamesbykevin.androidframework.resources.Images;
 import com.gamesbykevin.androidframework.screen.Screen;
@@ -55,6 +54,9 @@ public class MenuScreen implements Screen, Disposable
      */
     public static final String BUTTON_TEXT_MORE_GAMES = "More";
     
+    /**
+     * Unique key for access to each button
+     */
     private enum Key
     {
         Start, Exit, Settings, Instructions, More, Rate, Twitter, Facebook

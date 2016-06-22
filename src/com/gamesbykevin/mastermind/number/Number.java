@@ -17,8 +17,8 @@ public class Number extends Entity implements Disposable
 	private static final int NUMBER_ANIMATION_HEIGHT = 166;
 	
 	//the dimensions of each number render
-	public static final int NUMBER_RENDER_WIDTH = 32;
-	public static final int NUMBER_RENDER_HEIGHT = 37;
+	public static final int NUMBER_RENDER_WIDTH = 30;
+	public static final int NUMBER_RENDER_HEIGHT = 35;
 	
 	/**
 	 * The key for each number animation
@@ -40,6 +40,9 @@ public class Number extends Entity implements Disposable
 	//our array object for each digit in our score
 	private ArrayList<Digit> numbers;
 
+	//the number
+	private int number = 0;
+	
 	/**
 	 * Default constructor
 	 */
@@ -84,25 +87,59 @@ public class Number extends Entity implements Disposable
 	}
 	
 	/**
+	 * Get the number
+	 * @return The number that is rendered in this class
+	 */
+	public int getNumber()
+	{
+		return this.number;
+	}
+	
+	/**
+	 * Update the number animation
+	 * @param number  The new number
+	 * @throws Exception
+	 */
+	public void setNumber(final int number) throws Exception
+	{
+		//we will re-use the x-coordinate of the first digit as our starting x, also re-use y-coordinate
+		if (numbers != null && !numbers.isEmpty())
+		{
+			setNumber(number, numbers.get(0).x, (int)getY());
+		}
+		else
+		{
+			setNumber(number, 0, (int)getY());
+		}
+		
+	}
+	
+	/**
 	 * Assign the number animation
 	 * @param number The desired number
 	 * @param x The starting x-coordinate
 	 * @param y The y-coordinate
 	 * @throws Exception If one of the characters in the number String are not mapped
 	 */
-	public void setNumber(final String number, int x, final int y) throws Exception
+	public void setNumber(final int number, int x, final int y) throws Exception
 	{
+		//assign the value
+		this.number = number;
+		
     	//assign the y-coordinate
     	setY(y);
     	
+    	//convert number to string
+    	String numberDesc = Integer.toString(number);
+    	
     	//disable any unnecessary digits
-    	for (int i = number.length(); i < numbers.size(); i++)
+    	for (int i = numberDesc.length(); i < numbers.size(); i++)
     	{
     		numbers.get(i).setEnabled(false);
     	}
     	
     	//convert string to single characters
-    	char[] characters = number.toCharArray();
+    	char[] characters = numberDesc.toCharArray();
     	
     	//check each character so we can map the animations
     	for (int i = 0; i < characters.length; i++)
@@ -207,7 +244,7 @@ public class Number extends Entity implements Disposable
     }
     
     /**
-     * This class will keep track of each digit in our score
+     * This class will keep track of each digit in our number
      */
     private class Digit
     {

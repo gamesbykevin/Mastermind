@@ -10,6 +10,7 @@ import com.gamesbykevin.mastermind.board.entries.Entry;
 import com.gamesbykevin.mastermind.board.peg.Selection;
 import com.gamesbykevin.mastermind.common.ICommon;
 import com.gamesbykevin.mastermind.entity.Entity;
+import com.gamesbykevin.mastermind.number.Number;
 import com.gamesbykevin.mastermind.panel.GamePanel;
 
 import android.graphics.Canvas;
@@ -33,12 +34,18 @@ public class Board extends Entity implements ICommon
 	//the solution for the board
 	private ArrayList<Selection.Key> solution;
 	
+	//our number object reference
+	private final Number number;
+	
 	/**
 	 * Create a new board
 	 * @param size The size of each entry on the board
 	 */
-	public Board(final int size)
+	public Board(final Number number, final int size)
 	{
+		//store our number object reference
+		this.number = number;
+		
 		//set the size
 		this.size = size;
 		
@@ -70,8 +77,37 @@ public class Board extends Entity implements ICommon
 	public void add()
 	{
 		this.entries.add(getSize());
+		
+		try
+		{
+			//update our # of attempts
+			this.number.setNumber(number.getNumber() + 1);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		//if the newest entry is to high up move it down onto the viewable screen
+		if (this.entries.getEntry().getY() < BoardHelper.ENTRY_Y_MIN)
+		{
+			//calculate offset and assign the velocity
+			super.setDY(BoardHelper.ENTRY_Y_MIN - this.entries.getEntry().getY());
+			
+			//update location of all entries
+			updateEntryLocation();
+				
+			//stop velocity
+			super.setDY(0);
+		}
 	}
 	
+	/**
+	 * Check the choices and entries for a selection.<br>
+	 * Here the player can make a selection, or un-select a current entry selection
+	 * @param x x-coordinate
+	 * @param y y-coordinate
+	 */
 	public void check(final int x, final int y)
 	{
 		//check to see if anything changed in our choices
@@ -81,9 +117,51 @@ public class Board extends Entity implements ICommon
 		this.entries.check(x, y);
 	}
 	
+	/**
+	 * Update the location of all the entries
+	 */
+	private void updateEntryLocation()
+	{
+		//if the board has velocity
+		if (super.getDY() != 0)
+		{
+			//make sure all entries do not go off the screen
+			if (super.getDY() > 0)
+			{
+				//if the current entry is at the bottom of the screen, stop the velocity
+				if (this.entries.getEntry().getY() >= BoardHelper.ENTRY_Y_MAX)
+					super.setDY(0);
+			}
+			else
+			{
+				//if the first entry is at the top of the screen, stop the velocity
+				if (this.entries.getEntries().get(0).getY() <= BoardHelper.ENTRY_Y_MIN)
+					super.setDY(0);
+			}
+			
+			//if we still have velocity update the location
+			if (super.getDY() != 0)
+			{
+				//update the y-coordinates of the entries
+				for (int i = 0; i < this.entries.getEntries().size(); i++)
+				{
+					//get the current entry
+					final Entry entry = this.entries.getEntries().get(i); 
+					
+					//update the y-coordinate
+					entry.setY(entry.getY() + (int)getDY());
+				}
+			}
+		}
+	}
+	
+	
 	@Override
 	public void update() throws Exception 
 	{
+		//update the location of the entries
+		updateEntryLocation();
+		
 		//update our entries
 		this.entries.update();
 		
