@@ -56,7 +56,7 @@ public class BoardHelper
 	 */
 	public static final int ENTRY_Y_MIN = (int)(PEG_BACKGROUND_ENTRY_DIMENSION_MIN * 3.25);
 	
-	/**
+	/** 
 	 * The maximum y-coordinate for our first entry.<br>
 	 * We do this because we want to keep the first entry viewable on the screen
 	 */
