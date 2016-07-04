@@ -7,6 +7,7 @@ import com.gamesbykevin.mastermind.board.entries.Entries;
 import com.gamesbykevin.mastermind.board.peg.Peg;
 import com.gamesbykevin.mastermind.board.peg.Selection;
 import com.gamesbykevin.mastermind.common.ICommon;
+import com.gamesbykevin.mastermind.game.GameHelper;
 import com.gamesbykevin.mastermind.panel.GamePanel;
 
 import android.graphics.Canvas;
@@ -22,19 +23,14 @@ public class Choices implements ICommon
 	private final Peg selection;
 	
 	/**
-	 * The dimension of the choice
+	 * The starting coordinates for the choices
 	 */
-	public static final int DIMENSION = 70;
+	private static final int START_X = GameHelper.HOME_X + (GameHelper.BUTTON_DIMENSION / 2);
 	
 	/**
 	 * The starting coordinates for the choices
 	 */
-	private static final int START_X = GamePanel.WIDTH - 5 - (DIMENSION / 2);
-	
-	/**
-	 * The starting coordinates for the choices
-	 */
-	private static final int START_Y = (DIMENSION / 2) + 15;
+	private static final int START_Y = GameHelper.INSTRUCTION_Y + GameHelper.Y_INCREMENT + (GameHelper.BUTTON_DIMENSION / 2);
 	
 	//do we check for selection
 	private boolean check = false;
@@ -52,15 +48,15 @@ public class Choices implements ICommon
 	private Button confirmEnabled, confirmDisabled;
 	
 	/**
-	 * The size of the confirmation button
-	 */
-	private static final int BUTTON_DIMENSION = DIMENSION;
-	
-	/**
 	 * The location of the confirm button
 	 */
-	private static final int BUTTON_X = START_X - (DIMENSION / 2);
-	private static final int BUTTON_Y = GamePanel.HEIGHT - DIMENSION - (DIMENSION / 2);
+	private static final int BUTTON_X = START_X - (GameHelper.BUTTON_DIMENSION / 2);
+	private static final int BUTTON_Y = GamePanel.HEIGHT - GameHelper.BUTTON_DIMENSION - (GameHelper.BUTTON_DIMENSION / 3);
+	
+	/**
+	 * The dimension of each choice button
+	 */
+	private static final int DIMENSION = GameHelper.BUTTON_DIMENSION;
 	
 	/**
 	 * Default constructor
@@ -75,15 +71,15 @@ public class Choices implements ICommon
 		this.confirmEnabled = new Button(Images.getImage(Assets.ImageGameKey.ConfirmEntryEnabled));
 		this.confirmEnabled.setX(BUTTON_X);
 		this.confirmEnabled.setY(BUTTON_Y);
-		this.confirmEnabled.setWidth(BUTTON_DIMENSION);
-		this.confirmEnabled.setHeight(BUTTON_DIMENSION);
+		this.confirmEnabled.setWidth(DIMENSION);
+		this.confirmEnabled.setHeight(DIMENSION);
 		this.confirmEnabled.updateBounds();
 		
 		this.confirmDisabled = new Button(Images.getImage(Assets.ImageGameKey.ConfirmEntryDisabled));
 		this.confirmDisabled.setX(BUTTON_X);
 		this.confirmDisabled.setY(BUTTON_Y);
-		this.confirmDisabled.setWidth(BUTTON_DIMENSION);
-		this.confirmDisabled.setHeight(BUTTON_DIMENSION);
+		this.confirmDisabled.setWidth(DIMENSION);
+		this.confirmDisabled.setHeight(DIMENSION);
 		this.confirmDisabled.updateBounds();
 		
 		//reset the selections
@@ -167,9 +163,6 @@ public class Choices implements ICommon
 						//enable confirm button
 						enableConfirmation(true);
 						
-						//play sound effect
-						
-						
 						//no need to continue
 						return;
 					}
@@ -196,6 +189,7 @@ public class Choices implements ICommon
 				else
 				{
 					//play sound effect for invalid selection
+					Assets.playInvalidSelection();
 				}
 			}
 		}
@@ -240,7 +234,7 @@ public class Choices implements ICommon
 				this.points[i] = new Point(x, y);
 				
 				//increase the coordinate
-				y += (DIMENSION * 1.2);
+				y += GameHelper.Y_INCREMENT;
 			}
 		}
 	}

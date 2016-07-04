@@ -75,12 +75,18 @@ public class Assets
     	Button, 
     	Cancel, 
     	Confirm, 
+    	LevelLocked,
+    	LevelOpen,
     	ExitText,
     	Facebook, 
     	Instructions,
+    	InstructionsScreenshot,
     	Logo, 
+    	PageNext,
+    	PagePrevious,
     	Splash, 
     	Twitter, 
+    	Winner
     }
     
     /**
@@ -90,11 +96,9 @@ public class Assets
     public enum ImageGameKey
     {
     	Attempts,
-    	Background,
     	ConfirmEntryEnabled,
     	ConfirmEntryDisabled,
     	Entry,
-    	Hint,
     	HomeNavigation,
     	ScreenInstructions,
     	InGameLogo,
@@ -108,7 +112,7 @@ public class Assets
      */
     public enum TextKey
     {
-        
+        Levels
     }
     
     /**
@@ -117,7 +121,8 @@ public class Assets
      */
     public enum AudioMenuKey
     {
-    	
+    	MenuTheme,
+    	Selection,
     }
     
     /**
@@ -126,12 +131,43 @@ public class Assets
      */
     public enum AudioGameKey
     {
-    	 
+    	Invalid,
+    	NotSolved,
+    	Remove,
+    	Solved,
+    	MainTheme,
     }
     
+    /**
+     * Play the menu selection sound effect
+     */
     public static final void playMenuSelection()
     {
-    	//Audio.play(AudioMenuKey.Selection);
+    	Audio.play(AudioMenuKey.Selection);
+    }
+    
+    /**
+     * Play the sound effect for an invalid selection
+     */
+    public static final void playInvalidSelection()
+    {
+    	Audio.play(AudioGameKey.Invalid);
+    }
+    
+    /**
+     * Play the menu theme
+     */
+    public static final void playMenuTheme()
+    {
+    	Audio.play(Assets.AudioMenuKey.MenuTheme, true);
+    }
+    
+    /**
+     * Play the main game theme
+     */
+    public static final void playMainTheme()
+    {
+    	Audio.play(Assets.AudioGameKey.MainTheme, true);
     }
     
     /**

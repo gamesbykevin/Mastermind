@@ -11,7 +11,6 @@ import com.gamesbykevin.mastermind.board.peg.Selection;
 import com.gamesbykevin.mastermind.common.ICommon;
 import com.gamesbykevin.mastermind.entity.Entity;
 import com.gamesbykevin.mastermind.number.Number;
-import com.gamesbykevin.mastermind.panel.GamePanel;
 
 import android.graphics.Canvas;
 
@@ -60,7 +59,7 @@ public class Board extends Entity implements ICommon
 		
 		//add animations
 		super.getSpritesheet().add(Key.Selection, new Animation(Images.getImage(Assets.ImageGameKey.Entry)));
-		super.getSpritesheet().add(Key.Hint, new Animation(Images.getImage(Assets.ImageGameKey.Hint)));
+		super.getSpritesheet().add(Key.Hint, new Animation(Images.getImage(Assets.ImageGameKey.Entry)));
 		
 		//reset
 		reset();
@@ -100,6 +99,15 @@ public class Board extends Entity implements ICommon
 			//stop velocity
 			super.setDY(0);
 		}
+	}
+	
+	/**
+	 * Has the board been solved?
+	 * @return true if the current entry has the correct colors in the correct position, false otherwise
+	 */
+	public boolean isSolved()
+	{
+		return this.entries.getEntry().isSolved();
 	}
 	
 	/**
@@ -189,41 +197,32 @@ public class Board extends Entity implements ICommon
 		
 		//reset the choices
 		this.choices.reset();
-		
-		//pick a new solution
-		setSolution();
 	}
 
-	private void setSolution()
+	/**
+	 * Assign the current solution
+	 * @param solution Array of indexes for each correct solution key
+	 */
+	public void assignSolution(final int[] solution)
 	{
-		//make sure list is empty
+		//clear list our for starters
 		getSolution().clear();
 		
-		ArrayList<Selection.Key> tmp = new ArrayList<Selection.Key>();
-		
-		//continue until we filled up our solution
-		while (getSolution().size() < this.size)
+		//assign our solution values
+		for (int i = 0; i < solution.length; i++)
 		{
-			//if our temp list is empty
-			if (tmp.isEmpty())
-			{
-				for (Selection.Key key : Selection.Key.values())
-				{
-					tmp.add(key);
-				}
-			}
+			//get the selection key index
+			final int index = solution[i];
 			
-			//pick random object
-			final int index = GamePanel.RANDOM.nextInt(tmp.size());
-			
-			//add random object to solution
-			getSolution().add(tmp.get(index));
-			
-			//remove it from our temp list
-			tmp.remove(index);
+			//add the correct solution key to our array list
+			getSolution().add(Selection.Key.values()[index]);
 		}
 	}
 	
+	/**
+	 * Get the solution that we are trying to crack
+	 * @return A list of peg selections
+	 */
 	public ArrayList<Selection.Key> getSolution()
 	{
 		return this.solution;
@@ -232,9 +231,6 @@ public class Board extends Entity implements ICommon
 	@Override
 	public void render(final Canvas canvas) throws Exception
 	{
-		//draw background first
-		canvas.drawBitmap(Images.getImage(Assets.ImageGameKey.Background), 0, 0, null);
-		
 		//render the backgrounds for all the entries first
 		for (int i = 0; i < this.entries.getEntries().size(); i++)
 		{

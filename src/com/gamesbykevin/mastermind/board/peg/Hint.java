@@ -8,8 +8,8 @@ public final class Hint extends Peg
 {
 	public enum Key
 	{
-		MatchColor(0, 320),
-		MatchColorAndPosition(31, 320);
+		MatchColor(0, 256),
+		MatchColorAndPosition(32, 256);
 		
 		//coordinates of animation
 		private final int x, y;
@@ -24,12 +24,7 @@ public final class Hint extends Peg
 	/**
 	 * Animation dimensions of the hint peg
 	 */
-	private static final int PEG_HINT_ANIMATION_WIDTH = 31;
-	
-	/**
-	 * Animation dimensions of the hint peg
-	 */
-	private static final int PEG_HINT_ANIMATION_HEIGHT = 32;
+	private static final int PEG_HINT_ANIMATION_DIMENSION = 32;
 	
 	/**
 	 * The ratio compared to the board background hint
@@ -48,11 +43,10 @@ public final class Hint extends Peg
 		{
 			final int x = key.x;
 			final int y = key.y;
-			final int w = PEG_HINT_ANIMATION_WIDTH;
-			final int h = PEG_HINT_ANIMATION_HEIGHT;
+			final int d = PEG_HINT_ANIMATION_DIMENSION;
 			
 			//add animation
-			addAnimation(Images.getImage(Assets.ImageGameKey.Selections), key, x, y, w, h);
+			addAnimation(Images.getImage(Assets.ImageGameKey.Selections), key, x, y, d, d);
 		}
 		
 		//set a default selection

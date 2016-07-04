@@ -11,7 +11,6 @@ import com.gamesbykevin.androidframework.resources.Disposable;
 import com.gamesbykevin.androidframework.resources.Images;
 import com.gamesbykevin.androidframework.screen.Screen;
 import com.gamesbykevin.mastermind.assets.Assets;
-import com.gamesbykevin.mastermind.game.GameHelper;
 import com.gamesbykevin.mastermind.panel.GamePanel;
 
 import java.util.HashMap;
@@ -63,12 +62,12 @@ public final class ScreenManager implements Screen, Disposable
     /**
      * The y-coordinate where we want to start putting the buttons
      */
-    public static final int BUTTON_Y = 100;
+    public static final int BUTTON_Y = 115;
     
     /**
      * The y-coordinate spacing between each button
      */
-    public static final int BUTTON_Y_INCREMENT = MenuScreen.BUTTON_HEIGHT + (int)(MenuScreen.BUTTON_HEIGHT * .2);
+    public static final int BUTTON_Y_INCREMENT = MenuScreen.BUTTON_HEIGHT + (int)(MenuScreen.BUTTON_HEIGHT * .3);
     
     /**
      * The y-coordinate spacing between each button
@@ -225,15 +224,34 @@ public final class ScreenManager implements Screen, Disposable
 	        		Audio.stop();
 	        		
 	        		//play menu theme
-	        		//Audio.play(Assets.AudioMenuKey.Menu, true);
+	        		Assets.playMenuTheme();
 	        	}
 	        }
-	        else if (state == State.Running)
+	        //if resuming from paused state
+	        else if (getState() == State.Paused)
+	        {
+        		//stop all sound
+        		Audio.stop();
+        		
+        		//if we are to continue running the game
+	        	if (state == State.Running)
+	        	{
+		        	//play the main theme
+	        		Assets.playMainTheme();
+	        	}
+	        	else if (state == State.Ready || state == State.Options)
+	        	{
+	        		//play menu theme
+	        		Assets.playMenuTheme();
+	        	}
+	        }
+	        else if (state == State.Running && getState() == State.Ready)
 	        {
 	        	//stop all sound
 	        	Audio.stop();
 	        		
-	        	//Audio.play(Assets.AudioMenuKey.Theme, true);
+	        	//play the main theme
+        		Assets.playMainTheme();
 	        }
     	}
     	finally

@@ -10,15 +10,14 @@ import android.view.MotionEvent;
 import com.gamesbykevin.androidframework.awt.Button;
 import com.gamesbykevin.androidframework.level.Select;
 import com.gamesbykevin.androidframework.resources.Images;
+import com.gamesbykevin.mastermind.score.Score;
 import com.gamesbykevin.mastermind.assets.Assets;
 import com.gamesbykevin.mastermind.board.Board;
 import com.gamesbykevin.mastermind.board.BoardHelper;
-import com.gamesbykevin.mastermind.board.entries.Entries;
 import com.gamesbykevin.mastermind.board.peg.Hint;
 import com.gamesbykevin.mastermind.board.peg.Selection;
+import com.gamesbykevin.mastermind.level.Levels;
 import com.gamesbykevin.mastermind.number.Number;
-import com.gamesbykevin.mastermind.panel.GamePanel;
-import com.gamesbykevin.mastermind.screen.MenuScreen;
 import com.gamesbykevin.mastermind.screen.OptionsScreen;
 import com.gamesbykevin.mastermind.screen.ScreenManager;
 
@@ -57,6 +56,15 @@ public final class Game implements IGame
     //button for home page and instructions
     private Button home, instructions;
     
+    //our level select object
+    private Select select;
+	
+    //the game score card
+    private Score score;
+    
+    //object for all our levels
+    private Levels levels;
+    
     /**
      * Create our game object
      * @param screen The main screen
@@ -67,20 +75,32 @@ public final class Game implements IGame
         //our main screen object reference
         this.screen = screen;
         
+        //create our levels object
+        this.levels = new Levels();
+        
         //create new number object and position it
         this.number = new Number();
-        this.number.setNumber(0, GameHelper.ATTEMPTS_X + Images.getImage(Assets.ImageGameKey.Attempts).getWidth() + 5, GameHelper.ATTEMPTS_Y - 5);
+        this.number.setNumber(0, GameHelper.ATTEMPTS_X + Images.getImage(Assets.ImageGameKey.Attempts).getWidth() + 5, GameHelper.ATTEMPTS_Y);
         
         //check the options to set the size of our board
         final int size;
         
+        //set the number of colors index
+        final int numberColorsIndex = getScreen().getScreenOptions().getIndex(OptionsScreen.Key.Difficulty); 
+        
+        //set the number of colors index
+        this.levels.setNumberColorsIndex(numberColorsIndex);
+        
+        //set the level number index
+        this.levels.setNumberLevel(0);
+        
         //depending on difficulty set the board size and peg dimensions
-        switch (getScreen().getScreenOptions().getIndex(OptionsScreen.Key.Difficulty))
+        switch (numberColorsIndex)
         {
         	//3
 	        case 0:
 	        	//set board selection size
-	        	size = BoardHelper.SIZE_MINIMUM;
+	        	size = BoardHelper.SIZE_MINIMUM + 0;
 	        	
 	        	//set the dimensions of the pegs themselves
 	        	BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION = BoardHelper.PEG_BACKGROUND_ENTRY_DIMENSION_MAX;
@@ -147,6 +167,28 @@ public final class Game implements IGame
         
     	//create buttons for in game navigation
         createButtons();
+        
+        //create the level select screen
+        this.select = new Select();
+        this.select.setButtonNext(new Button(Images.getImage(Assets.ImageMenuKey.PageNext)));
+        this.select.setButtonOpen(new Button(Images.getImage(Assets.ImageMenuKey.LevelOpen)));
+        this.select.setButtonLocked(new Button(Images.getImage(Assets.ImageMenuKey.LevelLocked)));
+        this.select.setButtonPrevious(new Button(Images.getImage(Assets.ImageMenuKey.PagePrevious)));
+        this.select.setButtonSolved(new Button(Images.getImage(Assets.ImageMenuKey.LevelOpen)));
+        this.select.setCols(GameHelper.SELECT_COLS);
+        this.select.setRows(GameHelper.SELECT_ROWS);
+        this.select.setDimension(GameHelper.SELECT_DIMENSION);
+        this.select.setDescription("", 0, -GameHelper.SELECT_DIMENSION);
+        this.select.setPadding(GameHelper.SELECT_PADDING);
+        this.select.setStartX(GameHelper.SELECT_START_X);
+        this.select.setStartY(GameHelper.SELECT_START_Y);
+        this.select.setTotal(getLevels().getSize());
+        
+        //create our score card
+        this.score = new Score(screen.getPanel().getActivity());
+        
+        //update the level select screen
+        GameHelper.updateSelect(this);
     }
     
     /**
@@ -181,6 +223,21 @@ public final class Game implements IGame
     	
     	//update the bounds of the button
     	this.instructions.updateBounds();
+    }
+    
+    public Levels getLevels()
+    {
+    	return this.levels;
+    }
+    
+    public Score getScore()
+    {
+    	return this.score;
+    }
+    
+    public Select getSelect()
+    {
+    	return this.select;
     }
     
     public Button getButtonHome()
@@ -232,7 +289,7 @@ public final class Game implements IGame
             //create new paint object
             this.paint = new Paint();
             //this.paint.setTypeface(Font.getFont(Assets.FontGameKey.Default));
-            this.paint.setTextSize(48f);
+            this.paint.setTextSize(36f);
             this.paint.setColor(Color.WHITE);
             this.paint.setLinearText(false);
     	}
@@ -247,13 +304,24 @@ public final class Game implements IGame
     	if (!GameHelper.canPlay())
     		return;
     	
+    	//if we don't have a level selection, let's check for it
+    	if (!getSelect().hasSelection())
+    	{
+    		//if action up, check the location
+    		if (action == MotionEvent.ACTION_UP)
+    			getSelect().setCheck((int)x, (int)y);
+    		
+    		//don't continue
+    		return;
+    	}
+    	
 		//if we are to show in game instructions
-		if (GameHelper.INGAME_INSTRUCTIONS)
+		if (GameHelper.IN_GAME_INSTRUCTIONS)
 		{
 			if (action == MotionEvent.ACTION_UP)
 			{
 				//flag display instructions false
-				GameHelper.INGAME_INSTRUCTIONS = false;
+				GameHelper.IN_GAME_INSTRUCTIONS = false;
 			}
 			
 			//no need to continue
@@ -271,7 +339,7 @@ public final class Game implements IGame
 			if (this.getButtonHome().contains(x, y))
 				GameHelper.EXIT_GAME = true;
 			if (this.getButtonInstructions().contains(x, y))
-				GameHelper.INGAME_INSTRUCTIONS = true;
+				GameHelper.IN_GAME_INSTRUCTIONS = true;
     	}
     	else if (action == MotionEvent.ACTION_DOWN)
 		{
@@ -284,6 +352,10 @@ public final class Game implements IGame
 			//if we have not yet moved
 			if (!this.moved)
 			{
+				//make sure we aren't in the area of menu and choices
+				if (x >= GameHelper.HOME_X)
+					return;
+				
 				//flag moving as true
 				this.moved = true;
 				
@@ -293,7 +365,7 @@ public final class Game implements IGame
 			else
 			{
 				//calculate the difference
-				float yDiff = (y - this.moveY) * 2;
+				float yDiff = (y - this.moveY) * GameHelper.ENTRY_SCROLL_MULTIPLIER;
 				
 				//update the y-coordinate(s) of the existing entries
 				this.getBoard().setDY(yDiff);
@@ -377,6 +449,24 @@ public final class Game implements IGame
     	{
     		this.instructions.dispose();
     		this.instructions = null;
+    	}
+    	
+    	if (this.select != null)
+    	{
+    		this.select.dispose();
+    		this.select = null;
+    	}
+    	
+    	if (this.score != null)
+    	{
+    		this.score.dispose();
+    		this.score = null;
+    	}
+    	
+    	if (this.levels != null)
+    	{
+    		this.levels.dispose();
+    		this.levels = null;
     	}
     }
 }

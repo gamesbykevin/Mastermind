@@ -17,8 +17,8 @@ public class Number extends Entity implements Disposable
 	private static final int NUMBER_ANIMATION_HEIGHT = 166;
 	
 	//the dimensions of each number render
-	public static final int NUMBER_RENDER_WIDTH = 30;
-	public static final int NUMBER_RENDER_HEIGHT = 35;
+	public static final int NUMBER_RENDER_WIDTH = 24;
+	public static final int NUMBER_RENDER_HEIGHT = 28;
 	
 	/**
 	 * The key for each number animation

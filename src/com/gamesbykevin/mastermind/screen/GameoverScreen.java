@@ -6,13 +6,13 @@ import android.view.MotionEvent;
 import java.util.HashMap;
 
 import com.gamesbykevin.androidframework.awt.Button;
-import com.gamesbykevin.androidframework.resources.Audio;
 import com.gamesbykevin.androidframework.resources.Disposable;
 import com.gamesbykevin.androidframework.resources.Images;
 import com.gamesbykevin.androidframework.screen.Screen;
 import com.gamesbykevin.mastermind.MainActivity;
 import com.gamesbykevin.mastermind.assets.Assets;
 import com.gamesbykevin.mastermind.game.GameHelper;
+import com.gamesbykevin.mastermind.thread.MainThread;
 
 /**
  * The game over screen
@@ -23,21 +23,16 @@ public class GameoverScreen implements Screen, Disposable
     //our main screen reference
     private final ScreenManager screen;
     
-    //timer
-    private long time;
+    //keep track of the number of frames passed
+    private int frames;
     
     /**
      * The amount of time to wait until we render the game over menu
      */
-    private static final long DELAY_MENU_DISPLAY = 2000L;
+    private static final long MENU_DISPLAY_FRAMES_DELAY = MainThread.FPS;
     
     //do we display the menu
     private boolean display = false;
-    
-    /**
-     * The text to display for the new game
-     */
-    private static final String BUTTON_TEXT_RETRY = "Retry";
     
     /**
      * The text to display when playing next level
@@ -73,12 +68,12 @@ public class GameoverScreen implements Screen, Disposable
     /**
      * The x-coordinate for the text
      */
-    public static final int TEXT_X = 40;
+    public static final int TEXT_X = 93;
     
     /**
      * The y-coordinate for the text
      */
-    public static final int TEXT_Y = 0;
+    public static final int TEXT_Y = ScreenManager.LOGO_Y;
 
     /**
      * Create the game over screen
@@ -149,8 +144,8 @@ public class GameoverScreen implements Screen, Disposable
     @Override
     public void reset()
     {
-        //reset timer
-        time = System.currentTimeMillis();
+        //reset frame count
+    	this.frames = 0;
         
         //do we display the menu
         setDisplay(false);
@@ -247,26 +242,26 @@ public class GameoverScreen implements Screen, Disposable
 			switch (getSelection())
 			{
 				case Level:
-					//no longer winning
-					GameHelper.WIN = false;
 					
-					//flag lose false
-					GameHelper.LOSE = false;
+					//flag that we need to select a level
+					getScreen().getScreenGame().getGame().getSelect().setSelection(false);
 					
 	                //move back to the game
 					getScreen().setState(ScreenManager.State.Running);
 					
 	                //play sound effect
 					Assets.playMenuSelection();
+					
+	                //end of case
 					break;
 			
 				case Next:
 					
-					//no longer winning
-					GameHelper.WIN = false;
+					//get the current level number
+					int numberLevel = getScreen().getScreenGame().getGame().getLevels().getNumberLevel();
 					
-					//flag lose false
-					GameHelper.LOSE = false;
+					//assign the next level number
+					getScreen().getScreenGame().getGame().getLevels().setNumberLevel(numberLevel + 1);
 					
 	                //reset with the same settings
 					GameHelper.RESET = true;
@@ -318,13 +313,18 @@ public class GameoverScreen implements Screen, Disposable
 	        if (!hasDisplay())
 	        {
 	            //if time has passed display menu
-	            if (System.currentTimeMillis() - time >= DELAY_MENU_DISPLAY)
+	            if (this.frames >= MENU_DISPLAY_FRAMES_DELAY)
 	            {
 	            	//determine what button text is displayed
-	            	buttons.get(Key.Next).setDescription(0, (GameHelper.GAMEOVER) ? BUTTON_TEXT_RETRY : BUTTON_TEXT_NEXT);
+	            	buttons.get(Key.Next).setDescription(0, BUTTON_TEXT_NEXT);
 	            	
 	            	//display the menu
 	            	setDisplay(true);
+	            }
+	            else
+	            {
+	            	//keep counting the frames
+	            	this.frames++;
 	            }
 	        }
     	}
@@ -344,7 +344,8 @@ public class GameoverScreen implements Screen, Disposable
             	buttons.get(key).render(canvas, getScreen().getPaint());
             }
             
-        	//canvas.drawBitmap(Images.getImage(Assets.ImageMenuKey.Gameover), TEXT_X, TEXT_Y, null);
+            //render winner text
+        	canvas.drawBitmap(Images.getImage(Assets.ImageMenuKey.Winner), TEXT_X, TEXT_Y, null);
         }
     }
     

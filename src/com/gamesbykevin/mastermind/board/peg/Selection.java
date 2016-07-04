@@ -10,16 +10,7 @@ public final class Selection extends Peg
 	 */
 	public enum Key
 	{
-		Red(0,0), 
-		White(1,0), 
-		Black(0,1), 
-		//LightPurple(1,1), 
-		//Gray(0,2), 
-		DarkPurple(1,2), 
-		Blue(0,3), 
-		Green(1,3), 
-		Yellow(0,4), 
-		Orange(1,4);
+		Red(0,0), White(1,0), Black(0,1), Yellow(1,1), Orange(0,2), Brown(1,2), Blue(0,3), Green(1,3);
 		
 		//cell coordinate
 		private final int col, row;

@@ -36,7 +36,7 @@ public class OptionsScreen implements Screen, Disposable
     //buttons to access each button in the list
     public enum Key
     {
-    	Back, Sound, Vibrate, Difficulty, SameColor, 
+    	Back, Sound, Vibrate, Difficulty,  
     	Instructions, Facebook, Twitter
     }
     
@@ -68,10 +68,6 @@ public class OptionsScreen implements Screen, Disposable
         //add difficulty
         y += ScreenManager.BUTTON_Y_INCREMENT;
         addButtonDifficulty(x, y);
-        
-        //add same color
-        y += ScreenManager.BUTTON_Y_INCREMENT;
-        addButtonSameColor(x, y);
         
         //the back button
         y += ScreenManager.BUTTON_Y_INCREMENT;
@@ -163,16 +159,6 @@ public class OptionsScreen implements Screen, Disposable
         this.buttons.put(Key.Sound, button);
     }
 
-    private void addButtonSameColor(final int x, final int y)
-    {
-        Button button = new Button(Images.getImage(Assets.ImageMenuKey.Button));
-        button.addDescription("No Repeat");
-        button.addDescription("Repeat Colors");
-        button.setX(x);
-        button.setY(y);
-    	this.buttons.put(Key.SameColor, button);
-    }
-    
     private void addButtonDifficulty(final int x, final int y)
     {
         Button button = new Button(Images.getImage(Assets.ImageMenuKey.Button));
@@ -184,6 +170,10 @@ public class OptionsScreen implements Screen, Disposable
         button.addDescription("Colors: 8");
         button.setX(x);
         button.setY(y);
+        
+        //default value
+        button.setIndex(1);
+        
     	this.buttons.put(Key.Difficulty, button);
     }
     
@@ -259,7 +249,6 @@ public class OptionsScreen implements Screen, Disposable
 						case Sound:
 						case Vibrate:
 						case Difficulty:
-						case SameColor:
 							button.positionText(getScreen().getPaint());
 							break;
 							
@@ -348,7 +337,6 @@ public class OptionsScreen implements Screen, Disposable
 	                
 				case Vibrate:
 				case Difficulty:
-				case SameColor:
 					
 					//change index
 					button.setIndex(button.getIndex() + 1);
@@ -438,7 +426,6 @@ public class OptionsScreen implements Screen, Disposable
 	    			case Sound:
 	    			case Vibrate:
 	    			case Difficulty:
-	    			case SameColor:
 	    				buttons.get(key).render(canvas, getScreen().getPaint());
 	    				break;
 	    				

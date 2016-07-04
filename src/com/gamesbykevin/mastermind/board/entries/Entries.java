@@ -2,6 +2,8 @@ package com.gamesbykevin.mastermind.board.entries;
 
 import java.util.ArrayList;
 
+import com.gamesbykevin.androidframework.resources.Audio;
+import com.gamesbykevin.mastermind.assets.Assets;
 import com.gamesbykevin.mastermind.board.Board;
 import com.gamesbykevin.mastermind.board.BoardHelper;
 import com.gamesbykevin.mastermind.board.peg.Hint;
@@ -186,6 +188,9 @@ public class Entries implements ICommon
 					
 					//mark the selection null
 					getEntry().getSelections().set(index, null);
+					
+					//play remove sound effect
+					Audio.play(Assets.AudioGameKey.Remove, false);
 				}
 			}
 		}
@@ -205,7 +210,18 @@ public class Entries implements ICommon
 					
 					//if we did not solve yet, add another entry
 					if (!entry.isSolved())
+					{
+						//add another entry to the board
 						board.add();
+						
+						//play not solved sound effect
+						Audio.play(Assets.AudioGameKey.NotSolved, false);
+					}
+					else
+					{
+						//play solved sound effect
+						Audio.play(Assets.AudioGameKey.Solved, false);
+					}
 				}
 			}
 		}

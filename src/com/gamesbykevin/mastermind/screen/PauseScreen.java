@@ -33,7 +33,13 @@ public class PauseScreen implements Screen, Disposable
     //store the previous state
     private ScreenManager.State previous;
     
+    /**
+     * The size of the font
+     */
     private static final float DEFAULT_FONT_SIZE = 96f;
+    
+    //do we un-pause the screen
+    private boolean unpause = false;
     
     public PauseScreen(final ScreenManager screen)
     {
@@ -49,11 +55,11 @@ public class PauseScreen implements Screen, Disposable
         Rect tmp = new Rect();
         
         //get the rectangle around the message
-        paint.getTextBounds(MESSAGE, 0, MESSAGE.length(), tmp);
+        this.paint.getTextBounds(MESSAGE, 0, MESSAGE.length(), tmp);
         
         //store the dimensions
-        pixelW = tmp.width();
-        pixelH = tmp.height();
+        this.pixelW = tmp.width();
+        this.pixelH = tmp.height();
     }
     
     /**
@@ -91,8 +97,8 @@ public class PauseScreen implements Screen, Disposable
     {
         if (action == MotionEvent.ACTION_UP)
         {
-            //return to the previous state
-            screen.setState(previous);
+        	//un-pause the game
+        	this.unpause = true;
             
             //no need to return additional events
             return false;
@@ -105,27 +111,38 @@ public class PauseScreen implements Screen, Disposable
     @Override
     public void update() throws Exception
     {
-        //nothing needed to update here
+    	//if we want to un-pause the game
+        if (this.unpause)
+        {
+        	//flag un-pause false
+        	this.unpause = false;
+        	
+            //return to the previous state
+            this.screen.setState(getStatePrevious());
+            
+            //no need to continue here
+            return;
+        }
     }
     
     @Override
     public void render(final Canvas canvas) throws Exception
     {
-        if (paint != null)
+        if (this.paint != null)
         {
             //calculate middle
             final int x = (GamePanel.WIDTH / 2) - (pixelW / 2);
             final int y = (GamePanel.HEIGHT / 2) - (pixelH / 2);
              
             //draw text
-            canvas.drawText(MESSAGE, x, y, paint);
+            canvas.drawText(MESSAGE, x, y, this.paint);
         }
     }
     
     @Override
     public void dispose()
     {
-        if (paint != null)
-            paint = null;
+        if (this.paint != null)
+        	this.paint = null;
     }
 }
