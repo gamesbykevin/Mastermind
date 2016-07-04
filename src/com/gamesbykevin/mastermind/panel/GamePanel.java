@@ -271,6 +271,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Di
         {
             e.printStackTrace();
         }
+        
+        //return control to android
+        return;
     }
     
     @Override
@@ -291,8 +294,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Di
         else
         {
         	//if the screen does not exist, just exit the game
-        	getActivity().finish();
+        	getActivity().finish();        	
         }
+        
+        //return control to android
+        return;
     }
     
     @Override

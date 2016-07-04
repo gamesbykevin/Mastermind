@@ -260,15 +260,18 @@ public class MenuScreen implements Screen, Disposable
         		{
         			switch (key)
         			{
-        				//exit game here instead of update(), to avoid infinite loop
+        				//exit game here to avoid infinite loop
 	        			case Exit:
-	        	            //play sound effect
-	        				Assets.playMenuSelection();
-	        	            
-	        	            //exit game
-	        	            getScreen().getPanel().getActivity().finish();
-	        	            break;
-                        
+	        				
+				            //play sound effect
+							Assets.playMenuSelection();
+				            
+				            //exit game
+				            getScreen().getPanel().getActivity().finish();
+				            
+				            //we are done
+				            break;
+        			
 	        			default:
 	        				//everything else we store the selection and change in update()
 	        				setSelection(key);

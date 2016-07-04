@@ -14,12 +14,7 @@ public class MainThread extends Thread
     /**
      * Is debug mode enabled?
      */
-    public static final boolean DEBUG = true;
-    
-    /**
-     * The default time to sleep when paused
-     */
-    private static final long DEFAULT_PAUSE_SLEEP = 333L;
+    public static final boolean DEBUG = false;
     
     //the assigned frames per second for this game
     public static final int FPS = 30;
@@ -83,11 +78,8 @@ public class MainThread extends Thread
             	//if the game is paused we won't continue
             	if (isPaused())
             	{
-            		//sleep for a short time
-            		sleep(DEFAULT_PAUSE_SLEEP);
-            		
-            		//don't continue since the thread is paused
-            		continue;
+            		//exit the loop
+            		break;
             	}
             	
                 //get the start time of this update

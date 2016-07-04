@@ -14,12 +14,12 @@ import android.view.WindowManager;
  * Splash loading screen
  * @author GOD
  */
-public class Splash extends Activity
+public final class Splash extends Activity
 {
     /**
      * Time delay to show the splash screen
      */
-    private static final long TIME_DELAY = 1000L;
+    private static final long TIME_DELAY = 1500L;
     
     /**
      * Called when the activity is first created
@@ -60,7 +60,11 @@ public class Splash extends Activity
     @Override
     public void finish()
     {
+    	//call to parent
         super.finish();
+        
+        //return control to android
+        return;
     }
     
     /**
@@ -107,6 +111,9 @@ public class Splash extends Activity
     {
         //perform final cleanup
         super.onDestroy();
+        
+        //return control to android
+        return;
     }
     
     /**

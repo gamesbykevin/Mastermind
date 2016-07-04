@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class MainActivity extends Activity 
+public final class MainActivity extends Activity 
 {
     //our game panel
     private GamePanel panel;
@@ -22,12 +22,12 @@ public class MainActivity extends Activity
     /**
      * The web address where this game can be rated
      */
-    public static final String WEBPAGE_RATE_URL = "https://play.google.com/store/apps/details?id=com.gamesbykevin.breakout";
+    public static final String WEBPAGE_RATE_URL = "https://play.google.com/store/apps/details?id=com.gamesbykevin.mastermind";
 
     /**
      * The url that contains the instructions for the game
      */
-    public static final String WEBPAGE_GAME_INSTRUCTIONS_URL = "http://gamesbykevin.com/2016/05/31/breakout-2";
+    public static final String WEBPAGE_GAME_INSTRUCTIONS_URL = "http://gamesbykevin.com/2016/07/04/mastermind";
     
     /**
      * The face book url
@@ -40,12 +40,20 @@ public class MainActivity extends Activity
     public static final String WEBPAGE_TWITTER_URL = "https://twitter.com/gamesbykevin";
     
     /**
+     * Keep track of when the activity is finished so we don't call multiple times
+     */
+    private static boolean FINISH_ACTIVITY = false;
+    
+    /**
      * Called when the activity is first created
      * @param savedInstanceState 
      */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+    	//we have not yet finished the activity
+    	FINISH_ACTIVITY = false;
+    	
         //turn the title off
         super.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -78,6 +86,13 @@ public class MainActivity extends Activity
     @Override
     public void finish()
     {
+    	//if we already finished the activity don't do it again
+    	if (FINISH_ACTIVITY)
+    		return;
+    	
+    	//flag true
+    	FINISH_ACTIVITY = true;
+    	
         //cleanup game panel if it exists
         if (getGamePanel() != null)
         {
@@ -87,6 +102,9 @@ public class MainActivity extends Activity
         
         //call parent
         super.finish();
+        
+        //return control to android
+        return;
     }
     
     /**
@@ -120,6 +138,9 @@ public class MainActivity extends Activity
         
         //perform final cleanup
         super.onDestroy();
+        
+        //return control to android
+        return;
     }
     
     /**
