@@ -86,7 +86,8 @@ public class Assets
     	PagePrevious,
     	Splash, 
     	Twitter, 
-    	Winner
+    	Winner,
+    	Youtube
     }
     
     /**

@@ -30,7 +30,7 @@ public final class MainActivity extends Activity
     public static final String WEBPAGE_GAME_INSTRUCTIONS_URL = "http://gamesbykevin.com/2016/07/04/mastermind";
     
     /**
-     * The face book url
+     * The facebook url
      */
     public static final String WEBPAGE_FACEBOOK_URL = "https://facebook.com/gamesbykevin";
     
@@ -38,6 +38,11 @@ public final class MainActivity extends Activity
      * The twitter url
      */
     public static final String WEBPAGE_TWITTER_URL = "https://twitter.com/gamesbykevin";
+    
+    /**
+     * The youtube url
+     */
+    public static final String WEBPAGE_YOUTUBE_URL = "https://youtube.com/gamesbykevin";
     
     /**
      * Keep track of when the activity is finished so we don't call multiple times

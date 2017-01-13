@@ -237,6 +237,13 @@ public class Entry implements Disposable
 	 */
 	public void analyze(final ArrayList<Selection.Key> solution)
 	{
+		//keep track of the solution keys that we counted for this analysis
+		final boolean sUsed[] = new boolean[solution.size()];
+		
+		//keep track of our entry keys that we counted for this analysis
+		final boolean cUsed[] = new boolean[solution.size()];
+		
+		
 		//how many selections are the correct color and in the correct position?
 		int match = 0;
 		
@@ -252,28 +259,30 @@ public class Entry implements Disposable
 				//keep track of correct color in correct position
 				match++;
 				
-				//skip to next selection
-				continue;
-			}
-			
-			//since there was no perfect match check if the color is in another location
-			for (int index = 0; index < solution.size(); index++)
-			{
-				//don't check if the same location
-				if (i == index)
-					continue;
-				
-				//if these match but not in the same position
-				if (this.getSelections().get(i) == solution.get(index))
-				{
-					//keep track of correct colors in the wrong position
-					position++;
-					
-					//exit inner loop
-					break;
-				}
+				//mark that we used the code and solution
+				cUsed[i] = sUsed[i] = true;
 			}
 		}
+		
+		//now lets check for correct colors that aren't in the correct position
+		for (int i = 0; i < solution.size(); i++) 
+		{
+	        for (int j = 0; j < getSelections().size(); j++) 
+	        {
+	        	//if the keys match and we haven't already counted these, then we have the correct color in the wrong position
+	            if (!sUsed[i] && !cUsed[j] && getSelections().get(j) == solution.get(i)) 
+	            {
+	            	//keep track correct color in wrong position
+	                position++;
+	                
+	                //flag that we used these in our analysis
+	                sUsed[i] = cUsed[j] = true;
+	                
+	                //no need to continue current iteration
+	                break;
+	            }
+	        }
+	    }		
 		
 		//add the correct color/position hints
 		for (int i = 0; i < match; i++)

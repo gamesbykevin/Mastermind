@@ -37,7 +37,7 @@ public class OptionsScreen implements Screen, Disposable
     public enum Key
     {
     	Back, Sound, Vibrate, Difficulty,  
-    	Instructions, Facebook, Twitter
+    	Instructions, Facebook, Twitter, Youtube
     }
     
     //the user selection
@@ -86,6 +86,7 @@ public class OptionsScreen implements Screen, Disposable
 	        	case Instructions:
 	        	case Facebook:
 	        	case Twitter:
+	        	case Youtube:
 	        		button.setWidth(MenuScreen.ICON_DIMENSION);
 	            	button.setHeight(MenuScreen.ICON_DIMENSION);
 	            	button.updateBounds();
@@ -138,6 +139,11 @@ public class OptionsScreen implements Screen, Disposable
         tmp.setX(MenuScreen.ICON_X_TWITTER);
         tmp.setY(MenuScreen.ICON_Y);
         this.buttons.put(Key.Twitter, tmp);
+        
+        tmp = new Button(Images.getImage(Assets.ImageMenuKey.Youtube));
+        tmp.setX(MenuScreen.ICON_X_YOUTUBE);
+        tmp.setY(MenuScreen.ICON_Y);
+        this.buttons.put(Key.Youtube, tmp);
     }
     
     private void addButtonBack(final int x, final int y)
@@ -256,6 +262,7 @@ public class OptionsScreen implements Screen, Disposable
 						case Instructions:
 						case Facebook:
 						case Twitter:
+						case Youtube:
 							break;
 							
 						default:
@@ -383,7 +390,7 @@ public class OptionsScreen implements Screen, Disposable
 	                //play sound effect
 					Assets.playMenuSelection();
 	                
-	                //go to instructions
+	                //go to facebook
 					getScreen().getPanel().getActivity().openWebpage(MainActivity.WEBPAGE_FACEBOOK_URL);
 	                
 	                //end of case
@@ -394,12 +401,23 @@ public class OptionsScreen implements Screen, Disposable
 	                //play sound effect
 					Assets.playMenuSelection();
 	                
-	                //go to instructions
+	                //go to twitter
 					getScreen().getPanel().getActivity().openWebpage(MainActivity.WEBPAGE_TWITTER_URL);
 	                
 	                //end of case
 	                break;
 				
+				case Youtube:
+					
+	                //play sound effect
+					Assets.playMenuSelection();
+	                
+	                //go to youtube
+					getScreen().getPanel().getActivity().openWebpage(MainActivity.WEBPAGE_YOUTUBE_URL);
+	                
+	                //end of case
+	                break;
+	                
 				default:
 	            	throw new Exception("Key not setup here: " + selection);
     		}
@@ -432,6 +450,7 @@ public class OptionsScreen implements Screen, Disposable
 	    			case Instructions:
 	    			case Facebook:
 	    			case Twitter:
+	    			case Youtube:
 	    				buttons.get(key).render(canvas);
 	    				break;
 	    				

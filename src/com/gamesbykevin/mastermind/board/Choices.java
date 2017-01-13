@@ -125,8 +125,8 @@ public class Choices implements ICommon
 				Selection.Key key = Selection.Key.values()[i];
 				
 				//if not enabled don't bother checking
-				if (!key.isEnabled())
-					continue;
+				//if (!key.isEnabled())
+				//	continue;
 				
 				//if the entry is already complete we can't check this
 				if (this.entries.getEntry().isComplete())
@@ -152,7 +152,7 @@ public class Choices implements ICommon
 				if (getSelection().contains(checkX, checkY))
 				{
 					//now flag it false
-					key.setEnabled(false);
+					//key.setEnabled(false);
 					
 					//add selection to the current entry
 					this.entries.getEntry().addSelection(key);
